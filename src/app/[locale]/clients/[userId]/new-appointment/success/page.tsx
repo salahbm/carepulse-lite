@@ -1,16 +1,16 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
-import { Doctors } from "@/constants";
-import { getAppointment } from "@/lib/actions/appointment.actions";
-import { formatDateTime } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { Doctors } from '@/constants';
+import { getAppointment } from '@/lib/actions/appointment.actions';
+import { formatDateTime } from '@/lib/utils';
 
 const RequestSuccess = async ({
   searchParams,
   params: { userId },
 }: SearchParamProps) => {
-  const appointmentId = (searchParams?.appointmentId as string) || "";
+  const appointmentId = (searchParams?.appointmentId as string) || '';
   const appointment = await getAppointment(appointmentId);
 
   const doctor = Doctors.find(
@@ -68,7 +68,7 @@ const RequestSuccess = async ({
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/patients/${userId}/new-appointment`}>
+          <Link href={`/clients/${userId}/new-appointment`}>
             New Appointment
           </Link>
         </Button>
