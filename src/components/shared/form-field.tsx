@@ -123,9 +123,10 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             <ReactDatePicker
               showTimeSelect={props.showTimeSelect ?? false}
               selected={field.value}
-              onChange={field.onChang}
+              onChange={field.onChange}
               timeInputLabel="Time:"
               dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
+              timeFormat="HH:mm"
               wrapperClassName="date-picker"
             />
           </FormControl>
