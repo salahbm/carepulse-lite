@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   getPaginationRowModel,
@@ -6,12 +6,12 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
+} from '@tanstack/react-table';
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -19,8 +19,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { decryptKey } from "@/lib/utils";
+} from '@/components/ui/table';
+import { decryptKey } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,15 +32,15 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
+    typeof window !== 'undefined'
+      ? window.localStorage.getItem('accessKey')
       : null;
 
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
 
     if (accessKey !== process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-      redirect("/");
+      redirect('/');
     }
   }, [encryptedKey]);
 
@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
                 className="shad-table-row"
               >
                 {row.getVisibleCells().map((cell) => (
@@ -111,6 +111,16 @@ export function DataTable<TData, TValue>({
             alt="arrow"
           />
         </Button>
+        {/* Page Index */}
+        <div className="text-lg font-semibold">
+          <span>{table.getPrePaginationRowModel().rows.length}</span>
+          {/* TOTAL NUMBER OD DATA */}
+          <span className="mx-2">|</span>
+          <span>
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount()}
+          </span>
+        </div>
         <Button
           variant="outline"
           size="sm"
