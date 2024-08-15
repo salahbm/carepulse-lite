@@ -1,5 +1,7 @@
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+import React from 'react';
+
+const IndexLayout = ({ children }: { children: React.ReactNode }) => {
+  return <React.Fragment>{children}</React.Fragment>;
 };
 
-export default RootLayout;
+export default IndexLayout;

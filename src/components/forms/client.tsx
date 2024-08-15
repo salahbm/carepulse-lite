@@ -7,12 +7,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Form } from '@/components/ui/form';
-// import { createUser } from '@/lib/actions/patient.actions';
 import { UserFormValidation } from '@/lib/validation';
 
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import 'react-phone-number-input/style.css';
 import SubmitButton from '../shared/submit-btn';
+import { createUser } from '@/lib/actions/clients.actions';
+import toast from 'react-hot-toast';
 
 export const ClientForm = () => {
   const router = useRouter();
@@ -36,17 +37,15 @@ export const ClientForm = () => {
         email: values.email,
         phone: values.phone,
       };
-      console.log('====================================');
-      console.log('user', user);
-      console.log('====================================');
 
-      //   const newUser = await createUser(user);
-
-      //   if (newUser) {
-      //     router.push(`/patients/${newUser.$id}/register`);
-      //   }
+      const newUser = await createUser(user);
+      if (newUser) {
+        router.push(`/patients/${newUser.$id}/register`);
+        toast.success('Welcome to BookingUz!');
+      }
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong!');
     }
 
     setIsLoading(false);
