@@ -33,7 +33,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
         height={1500}
         width={1500}
         alt="appointment"
-        className="side-img max-w-[50%] bg-bottom transform scaleX(-1) "
+        className="side-img max-w-[40%] bg-bottom transform scaleX(-1) "
       />
     </div>
   );
