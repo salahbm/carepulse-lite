@@ -13,11 +13,11 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'CarePulse',
+  title: 'Booking.uz',
   description:
     'A healthcare client management System designed to streamline client registration, appointment scheduling, and medical records management for healthcare providers.',
   icons: {
-    icon: '/assets/icons/logo-icon.svg',
+    icon: '/assets/icons/logo-icon.png',
   },
 };
 
