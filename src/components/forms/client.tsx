@@ -40,7 +40,7 @@ export const ClientForm = () => {
 
       const newUser = await createUser(user);
       if (newUser) {
-        router.push(`/patients/${newUser.$id}/register`);
+        router.push(`/clients/${newUser.$id}/register`);
         toast.success('Welcome to BookingUz!');
       }
     } catch (error) {
