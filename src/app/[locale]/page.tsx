@@ -1,15 +1,14 @@
 import { ClientForm } from '@/components/forms/client';
+import { PasskeyModal } from '@/components/shared/otp-modal';
 import Image from 'next/image';
 import Link from 'next/link';
-
-// import { PasskeyModal } from "@/components/PasskeyModal";
 
 const Home = ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams?.admin === 'true';
 
   return (
     <div className="flex h-screen max-h-screen">
-      {/* {isAdmin && <PasskeyModal />} */}
+      {isAdmin && <PasskeyModal />}
 
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
@@ -17,7 +16,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
             src="/assets/icons/logo-full.svg"
             height={1000}
             width={1000}
-            alt="patient"
+            alt="client"
             className="mb-12 h-10 w-fit"
             priority
           />
@@ -39,7 +38,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
         src="/assets/images/onboarding-img.png"
         height={1000}
         width={1000}
-        alt="patient"
+        alt="client"
         className="side-img max-w-[50%]"
         priority
       />

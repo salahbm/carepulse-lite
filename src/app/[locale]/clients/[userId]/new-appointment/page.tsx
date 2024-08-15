@@ -4,7 +4,7 @@ import { getClient } from '@/lib/actions/clients.actions';
 import { AppointmentForm } from '@/components/forms/appointment';
 
 const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-  const patient = await getClient(userId);
+  const client = await getClient(userId);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -19,7 +19,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
           />
 
           <AppointmentForm
-            patientId={patient?.$id}
+            clientId={client?.$id}
             userId={userId}
             type="create"
           />

@@ -19,17 +19,20 @@ import { Form } from '../ui/form';
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import SubmitButton from '../shared/submit-btn';
 import toast from 'react-hot-toast';
-import { createAppointment } from '@/lib/actions/appointment.actions';
+import {
+  createAppointment,
+  updateAppointment,
+} from '@/lib/actions/appointment.actions';
 
 export const AppointmentForm = ({
   userId,
-  patientId,
+  clientId,
   type = 'create',
   appointment,
   setOpen,
 }: {
   userId: string;
-  patientId: string;
+  clientId: string;
   type: 'create' | 'schedule' | 'cancel';
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -68,10 +71,10 @@ export const AppointmentForm = ({
         status = 'pending';
     }
     try {
-      if (type === 'create' && patientId) {
+      if (type === 'create' && clientId) {
         const appointment = {
           userId,
-          patient: patientId,
+          client: clientId,
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
@@ -86,27 +89,28 @@ export const AppointmentForm = ({
             `/clients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
         }
+      } else {
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment: {
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,
+          },
+          type,
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        };
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        if (updatedAppointment) {
+          setOpen && setOpen(false);
+          form.reset();
+        }
       }
-      //   else {
-      //     const appointmentToUpdate = {
-      //       userId,
-      //       appointmentId: appointment?.$id!,
-      //       appointment: {
-      //         primaryPhysician: values.primaryPhysician,
-      //         schedule: new Date(values.schedule),
-      //         status: status as Status,
-      //         cancellationReason: values.cancellationReason,
-      //       },
-      //       type,
-      //     };
-      //     const updatedAppointment = await updateAppointment(appointmentToUpdate);
-      //     if (updatedAppointment) {
-      //       setOpen && setOpen(false);
-      //       form.reset();
-      //     }
-      //   }
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong!');
     }
     setIsLoading(false);
   };

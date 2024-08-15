@@ -6,9 +6,9 @@ import RegisterForm from '@/components/forms/register';
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
   const user = await getUser(userId);
-  const patient = await getClient(userId);
+  const client = await getClient(userId);
 
-  if (patient) redirect(`/clients/${userId}/new-appointment`);
+  if (client) redirect(`/clients/${userId}/new-appointment`);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -18,7 +18,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
             src="/assets/icons/logo-full.svg"
             height={1000}
             width={1000}
-            alt="patient"
+            alt="client"
             className="mb-12 h-10 w-fit"
           />
 
@@ -32,7 +32,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
         src="/assets/images/register-img.png"
         height={1000}
         width={1000}
-        alt="patient"
+        alt="client"
         className="side-img max-w-[390px]"
       />
     </div>
