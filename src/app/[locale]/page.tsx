@@ -1,4 +1,4 @@
-import { PatientForm } from '@/components/forms/patient';
+import { ClientForm } from '@/components/forms/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -21,7 +21,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
             className="mb-12 h-10 w-fit"
           />
 
-          <PatientForm />
+          <ClientForm />
 
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">

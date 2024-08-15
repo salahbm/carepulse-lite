@@ -14,7 +14,7 @@ import CustomFormField, { FormFieldType } from '../shared/form-field';
 import 'react-phone-number-input/style.css';
 import SubmitButton from '../shared/submit-btn';
 
-export const PatientForm = () => {
+export const ClientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,6 +36,9 @@ export const PatientForm = () => {
         email: values.email,
         phone: values.phone,
       };
+      console.log('====================================');
+      console.log('user', user);
+      console.log('====================================');
 
       //   const newUser = await createUser(user);
 
@@ -82,7 +85,7 @@ export const PatientForm = () => {
           control={form.control}
           name="phone"
           label="Phone number"
-          placeholder="(555) 123-4567"
+          placeholder="(998) 123-45-67"
         />
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
