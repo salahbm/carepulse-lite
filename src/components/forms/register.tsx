@@ -15,31 +15,34 @@ import {
   Doctors,
   GenderOptions,
   IdentificationTypes,
-  PatientFormDefaultValues,
+  ClientFormDefaultValues,
 } from '@/constants';
-import { PatientFormValidation } from '@/lib/validation';
+import { ClientFormValidation } from '@/lib/validation';
 
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-phone-number-input/style.css';
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import SubmitButton from '../shared/submit-btn';
 import { FileUploader } from '../shared/file-uploader';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-phone-number-input/style.css';
+import { registerClient } from '@/lib/actions/clients.actions';
+import toast from 'react-hot-toast';
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof PatientFormValidation>>({
-    resolver: zodResolver(PatientFormValidation),
+  const form = useForm<z.infer<typeof ClientFormValidation>>({
+    resolver: zodResolver(ClientFormValidation),
     defaultValues: {
-      ...PatientFormDefaultValues,
+      ...ClientFormDefaultValues,
       name: user.name,
       email: user.email,
       phone: user.phone,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+  const onSubmit = async (values: z.infer<typeof ClientFormValidation>) => {
     setIsLoading(true);
 
     // Store file info in form data as
@@ -58,13 +61,13 @@ const RegisterForm = ({ user }: { user: User }) => {
     }
 
     try {
-      const patient = {
+      const client = {
         userId: user.$id,
         name: values.name,
         email: values.email,
         phone: values.phone,
         birthDate: new Date(values.birthDate),
-        gender: values.gender,
+        gender: values.gender.toLocaleLowerCase() as Gender,
         address: values.address,
         occupation: values.occupation,
         emergencyContactName: values.emergencyContactName,
@@ -84,17 +87,14 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent: values.privacyConsent,
       };
 
-      console.log('====================================');
-      console.log('patient', patient);
-      console.log('====================================');
+      const newClient = await registerClient(client);
 
-      //   const newPatient = await registerPatient(patient);
-
-      //   if (newPatient) {
-      //     router.push(`/patients/${user.$id}/new-appointment`);
-      //   }
+      if (newClient) {
+        router.push(`/clients/${user.$id}/new-appointment`);
+      }
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong!');
     }
 
     setIsLoading(false);

@@ -1,6 +1,6 @@
 export const GenderOptions = ['Male', 'Female'];
 
-export const PatientFormDefaultValues = {
+export const ClientFormDefaultValues = {
   firstName: '',
   lastName: '',
   email: '',
