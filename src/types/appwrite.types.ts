@@ -1,6 +1,6 @@
 import { Models } from 'node-appwrite';
 
-export interface Patient extends Models.Document {
+export interface TClient extends Models.Document {
   email: string;
   phone: string;
   userId: string;
@@ -24,8 +24,22 @@ export interface Patient extends Models.Document {
   currentMedication: string | undefined;
 }
 
+export interface TCompany extends Models.Document {
+  name: string;
+  address: string;
+  phone: string;
+  businessId: string;
+  companyField: string;
+  companyType: string;
+  logoUrl: string | undefined;
+  keywords: string[] | string | undefined;
+  ownerFullName: string;
+  ownerPhone: string;
+  client: TClient[] | undefined;
+}
+
 export interface Appointment extends Models.Document {
-  client: Patient;
+  client: TClient;
   schedule: Date;
   status: Status;
   primaryPhysician: string;

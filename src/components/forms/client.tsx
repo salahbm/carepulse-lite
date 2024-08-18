@@ -15,9 +15,10 @@ import SubmitButton from '../shared/submit-btn';
 import { createUser } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
 
-export const ClientForm = () => {
+export const ClientForm = ({ company }: { company: string }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  console.log(company);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -40,7 +41,7 @@ export const ClientForm = () => {
 
       const newUser = await createUser(user);
       if (newUser) {
-        router.push(`/clients/${newUser.$id}/register`);
+        router.push(`/${company}/clients/${newUser.$id}/register`);
         toast.success('Welcome to BookingUz!');
       }
     } catch (error) {
