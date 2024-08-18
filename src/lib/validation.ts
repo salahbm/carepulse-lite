@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export const searchValidation = z.object({
+  search: z
+    .string()
+    .min(2, 'Name must be at least 4 characters')
+    .max(50, 'Name must be at most 50 characters'),
+});
 export const UserFormValidation = z.object({
   name: z
     .string()

@@ -6,7 +6,7 @@ export const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
 export const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 export const DATABASE_ID = process.env.DATABASE_ID;
 export const CLIENT_COLLECTION_ID = process.env.CLIENT_COLLECTION_ID;
-export const ADMIN_COLLECTION_ID = process.env.ADMIN_COLLECTION_ID;
+export const COMPANY_COLLECTION_ID = process.env.COMPANY_COLLECTION_ID;
 export const APPOINTMENT_COLLECTION_ID = process.env.APPOINTMENT_COLLECTION_ID;
 export const BUCKET_ID = process.env.NEXT_PUBLIC_BUCKET_ID;
 
