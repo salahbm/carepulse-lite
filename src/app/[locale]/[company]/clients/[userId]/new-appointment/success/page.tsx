@@ -8,7 +8,7 @@ import { formatDateTime } from '@/lib/utils';
 
 const RequestSuccess = async ({
   searchParams,
-  params: { clientId },
+  params: { userId, company },
 }: SearchParamProps) => {
   const appointmentId = (searchParams?.appointmentId as string) || '';
   const appointment = await getAppointment(appointmentId);
@@ -68,7 +68,7 @@ const RequestSuccess = async ({
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/clients/${clientId}/new-appointment`}>
+          <Link href={`/${company}/clients/${userId}/new-appointment`}>
             New Appointment
           </Link>
         </Button>

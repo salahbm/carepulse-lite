@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -38,6 +38,7 @@ export const AppointmentForm = ({
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
+  const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
 
   const AppointmentFormValidation = getAppointmentSchema(type);
@@ -85,9 +86,7 @@ export const AppointmentForm = ({
         if (newAppointment) {
           form.reset();
           toast.success('Appointment created successfully!');
-          router.push(
-            `/clients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
-          );
+          router.push(`/${path}/success?appointmentId=${newAppointment.$id}`);
         }
       } else {
         const appointmentToUpdate = {

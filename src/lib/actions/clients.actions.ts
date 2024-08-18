@@ -71,23 +71,20 @@ export const getClient = async (userId: string) => {
 };
 
 // REGISTER client
-export const registerClient = async ({
-  identificationDocument,
-  ...client
-}: RegisterUserParams) => {
+export const registerClient = async ({ ...client }: RegisterUserParams) => {
   try {
     // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
-    let file;
-    if (identificationDocument) {
-      const inputFile =
-        identificationDocument &&
-        InputFile.fromBuffer(
-          identificationDocument?.get('blobFile') as Blob,
-          identificationDocument?.get('fileName') as string
-        );
+    // let file;
+    // if (identificationDocument) {
+    //   const inputFile =
+    //     identificationDocument &&
+    //     InputFile.fromBuffer(
+    //       identificationDocument?.get('blobFile') as Blob,
+    //       identificationDocument?.get('fileName') as string
+    //     );
 
-      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
-    }
+    //   file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
+    // }
 
     // Create new client document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
     const newClient = await databases.createDocument(
@@ -95,10 +92,10 @@ export const registerClient = async ({
       CLIENT_COLLECTION_ID!,
       ID.unique(),
       {
-        identificationDocumentId: file?.$id ? file.$id : null,
-        identificationDocumentUrl: file?.$id
-          ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view??project=${PROJECT_ID}`
-          : null,
+        // identificationDocumentId: file?.$id ? file.$id : null,
+        // identificationDocumentUrl: file?.$id
+        //   ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view??project=${PROJECT_ID}`
+        //   : null,
         ...client,
       }
     );
