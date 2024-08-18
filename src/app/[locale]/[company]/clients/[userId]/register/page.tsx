@@ -4,11 +4,11 @@ import { redirect } from 'next/navigation';
 import { getClient, getUser } from '@/lib/actions/clients.actions';
 import RegisterForm from '@/components/forms/register';
 
-const Register = async ({ params: { userId } }: SearchParamProps) => {
-  const user = await getUser(userId);
-  const client = await getClient(userId);
+const Register = async ({ params: { clientId } }: SearchParamProps) => {
+  const user = await getUser(clientId);
+  const client = await getClient(clientId);
 
-  if (client) redirect(`/clients/${userId}/new-appointment`);
+  if (client) redirect(`/clients/${clientId}/new-appointment`);
 
   return (
     <div className="flex h-screen max-h-screen">

@@ -26,6 +26,7 @@ export const PasskeyModal = () => {
   const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
+  console.log(path);
 
   const encryptedKey =
     typeof window !== 'undefined'
@@ -38,7 +39,7 @@ export const PasskeyModal = () => {
     if (path)
       if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
         setOpen(false);
-        router.push('/admin');
+        router.push(`/${path}/admin`);
       } else {
         setOpen(true);
       }
@@ -46,7 +47,7 @@ export const PasskeyModal = () => {
 
   const closeModal = () => {
     setOpen(false);
-    router.push('/');
+    router.replace(`//${path}`);
   };
 
   const validatePasskey = (

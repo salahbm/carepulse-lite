@@ -3,14 +3,12 @@ import { PasskeyModal } from '@/components/shared/otp-modal';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Home = ({ company }: { company: string }) => {
-  // const isAdmin = searchParams?.admin === 'true';
-
-  console.log(company);
+const Home = ({ params: { company }, searchParams }: SearchParamProps) => {
+  const isAdmin = searchParams?.admin === 'true';
 
   return (
     <div className="flex h-screen max-h-screen">
-      {/* {isAdmin && <PasskeyModal />} */}
+      {isAdmin && <PasskeyModal />}
 
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
@@ -23,13 +21,13 @@ const Home = ({ company }: { company: string }) => {
             priority
           />
 
-          <ClientForm company={'fsfsfs'} />
+          <ClientForm />
 
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Booking uz
             </p>
-            <Link href="/?admin=true" className="text-green-500">
+            <Link href={`/${company}/?admin=true`} className="text-green-500">
               Admin
             </Link>
           </div>

@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { getClient } from '@/lib/actions/clients.actions';
 import { AppointmentForm } from '@/components/forms/appointment';
 
-const Appointment = async ({ params: { userId } }: SearchParamProps) => {
-  const client = await getClient(userId);
+const Appointment = async ({ params: { clientId } }: SearchParamProps) => {
+  const client = await getClient(clientId);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -20,7 +20,7 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
 
           <AppointmentForm
             clientId={client?.$id}
-            userId={userId}
+            userId={clientId}
             type="create"
           />
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,16 +15,15 @@ import SubmitButton from '../shared/submit-btn';
 import { createUser } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
 
-export const ClientForm = ({ company }: { company: string }) => {
+export const ClientForm = () => {
   const router = useRouter();
+  const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
-  console.log(company);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
       name: '',
-      email: '',
       phone: '',
     },
   });
@@ -35,13 +34,12 @@ export const ClientForm = ({ company }: { company: string }) => {
     try {
       const user = {
         name: values.name,
-        email: values.email,
         phone: values.phone,
       };
 
       const newUser = await createUser(user);
       if (newUser) {
-        router.push(`/${company}/clients/${newUser.$id}/register`);
+        router.push(`${path}/clients/${newUser.$id}/register`);
         toast.success('Welcome to BookingUz!');
       }
     } catch (error) {
@@ -68,16 +66,6 @@ export const ClientForm = ({ company }: { company: string }) => {
           placeholder="John Doe"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
-        />
-
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="email"
-          label="Email"
-          placeholder="johndoe@gmail.com"
-          iconSrc="/assets/icons/email.svg"
-          iconAlt="email"
         />
 
         <CustomFormField
