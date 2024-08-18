@@ -27,7 +27,6 @@ export const ClientForm = () => {
       phone: '',
     },
   });
-  console.log(path);
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);

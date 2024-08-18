@@ -31,20 +31,22 @@ export interface TCompany extends Models.Document {
   businessId: string;
   companyField: string;
   companyType: string;
-  logoUrl: string | undefined;
-  keywords: string[] | string | undefined;
+  logoUrl?: string;
+  keywords: string;
   ownerFullName: string;
-  ownerPhone: string;
-  client: TClient[] | undefined;
+  ownerPhone?: string;
+  adminPwd: string;
+  client?: TClient[];
 }
 
 export interface Appointment extends Models.Document {
   client: TClient;
   schedule: Date;
   status: Status;
-  primaryPhysician: string;
+  master: string;
   reason: string;
   note: string;
   userId: string;
   cancellationReason: string | null;
+  reScheduleReason: string | null;
 }

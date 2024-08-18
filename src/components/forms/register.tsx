@@ -20,7 +20,7 @@ import 'react-phone-number-input/style.css';
 import { registerClient } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
 
-const RegisterForm = ({ user }: { user: User }) => {
+const RegisterForm = ({ user, company }: { user: User; company: string }) => {
   const router = useRouter();
   const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
@@ -37,21 +37,6 @@ const RegisterForm = ({ user }: { user: User }) => {
   const onSubmit = async (values: z.infer<typeof ClientFormValidation>) => {
     setIsLoading(true);
 
-    // Store file info in form data as
-    // let formData;
-    // if (
-    //   values.identificationDocument &&
-    //   values.identificationDocument?.length > 0
-    // ) {
-    //   const blobFile = new Blob([values.identificationDocument[0]], {
-    //     type: values.identificationDocument[0].type,
-    //   });
-
-    //   formData = new FormData();
-    //   formData.append('blobFile', blobFile);
-    //   formData.append('fileName', values.identificationDocument[0].name);
-    // }
-
     try {
       const client = {
         userId: user.$id,
@@ -59,6 +44,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         phone: values.phone,
         gender: values.gender.toLocaleLowerCase() as Gender,
         privacyConsent: values.privacyConsent,
+        company: company,
       };
 
       const newClient = await registerClient(client);

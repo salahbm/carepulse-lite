@@ -128,6 +128,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
               timeFormat="HH:mm"
               wrapperClassName="date-picker"
+              minDate={new Date()}
             />
           </FormControl>
         </div>

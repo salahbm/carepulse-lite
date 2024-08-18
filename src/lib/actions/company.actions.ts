@@ -32,3 +32,20 @@ export const searchCompany = async (name: string) => {
     );
   }
 };
+// GET SEARCHED COMPANY
+export const getCompany = async (company: string) => {
+  try {
+    const clients = await databases.listDocuments(
+      DATABASE_ID!,
+      COMPANY_COLLECTION_ID!,
+      [Query.equal('name', [company])]
+    );
+
+    return parseStringify(clients.documents[0]);
+  } catch (error) {
+    console.error(
+      'An error occurred while retrieving the client details:',
+      error
+    );
+  }
+};

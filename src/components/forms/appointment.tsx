@@ -7,11 +7,8 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { SelectItem } from '@/components/ui/select';
-import { Doctors } from '@/constants';
-
 import { getAppointmentSchema } from '@/lib/validation';
-import { Appointment } from '@/types/appwrite.types';
+import { Appointment, TCompany } from '@/types/appwrite.types';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -27,12 +24,14 @@ import {
 export const AppointmentForm = ({
   userId,
   clientId,
+  company,
   type = 'create',
   appointment,
   setOpen,
 }: {
   userId: string;
   clientId: string;
+  company: TCompany;
   type: 'create' | 'schedule' | 'cancel';
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -46,7 +45,7 @@ export const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : '',
+      master: appointment ? appointment?.master : '',
       schedule: appointment
         ? new Date(appointment?.schedule!)
         : new Date(Date.now()),
@@ -59,6 +58,8 @@ export const AppointmentForm = ({
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
+    console.log(values);
+
     setIsLoading(true);
     let status;
     switch (type) {
@@ -71,17 +72,21 @@ export const AppointmentForm = ({
       default:
         status = 'pending';
     }
+
+    console.log(values);
     try {
       if (type === 'create' && clientId) {
         const appointment = {
-          userId,
-          client: clientId,
-          primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          status: status as Status,
           note: values.note,
+          status: status as Status,
+          userId,
+          master: company.name,
+          client: clientId,
         };
+        console.log(appointment);
+
         const newAppointment = await createAppointment(appointment);
         if (newAppointment) {
           form.reset();
@@ -93,7 +98,7 @@ export const AppointmentForm = ({
           userId,
           appointmentId: appointment?.$id!,
           appointment: {
-            primaryPhysician: values.primaryPhysician,
+            master: values.master,
             schedule: new Date(values.schedule),
             status: status as Status,
             cancellationReason: values.cancellationReason,
@@ -140,28 +145,20 @@ export const AppointmentForm = ({
 
         {type !== 'cancel' && (
           <>
-            <CustomFormField
-              fieldType={FormFieldType.SELECT}
-              control={form.control}
-              name="primaryPhysician"
-              label="Doctor"
-              placeholder="Select a doctor"
-            >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <Image
-                      src={doctor.image}
-                      width={32}
-                      height={32}
-                      alt="doctor"
-                      className="rounded-full border border-dark-500"
-                    />
-                    <p>{doctor.name}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </CustomFormField>
+            <p>You are scheduling an appointment for {company.name}</p>
+            <div className="inline-flex items-center justify-between gap-4">
+              <Image
+                src={company.logoUrl || '/assets/icons/logo-icon.png'}
+                alt="company logo"
+                width={50}
+                height={50}
+                className="rounded-full object-contain h-10 w-10"
+              />
+              <div>
+                <p className="text-lg font-semibold">{company.name}</p>
+                <p className="text-mg font-medium">{company.address}</p>
+              </div>
+            </div>
 
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
