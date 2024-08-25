@@ -38,13 +38,14 @@ export const ClientForm = () => {
       };
 
       const newUser = await createUser(user);
+      console.log(newUser);
+
       if (newUser) {
         router.push(`${path}/clients/${newUser.$id}/register`);
         toast.success('Welcome to BookingUz!');
       }
-    } catch (error) {
-      console.log(error);
-      toast.error('Something went wrong!');
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrong!');
     }
 
     setIsLoading(false);

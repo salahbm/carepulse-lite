@@ -22,7 +22,7 @@ const Home = () => {
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Booking uz
             </p>
-            <Link href="/?admin=true" className="text-green-500">
+            <Link href="/set-up" className="text-green-500">
               Create new company
             </Link>
           </div>

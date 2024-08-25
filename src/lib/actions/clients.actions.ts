@@ -8,9 +8,20 @@ import {
   users,
 } from '../appwrite.config';
 
+// CREATE USER
 export const createUser = async (user: CreateUserParams) => {
   try {
-    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+    // Check if a user with the given name and phone number already exists
+    const existingUserList = await users.list([
+      Query.equal('phone', user.phone),
+      Query.equal('name', user.name),
+    ]);
+
+    if (existingUserList.total > 0) {
+      return parseStringify(existingUserList.users[0]);
+    }
+
+    // If no user exists, create a new user
     const newUser = await users.create(
       ID.unique(),
       undefined,
@@ -21,15 +32,8 @@ export const createUser = async (user: CreateUserParams) => {
 
     return parseStringify(newUser);
   } catch (error: any) {
-    // Check existing user
-    if (error && error?.code === 409) {
-      const existingUser = await users.list([
-        Query.equal('phone', [user.phone]),
-      ]);
-
-      return existingUser.users[0];
-    }
     console.error('An error occurred while creating a new user:', error);
+    throw error;
   }
 };
 
@@ -53,14 +57,14 @@ export const getClient = async (userId: string) => {
     const clients = await databases.listDocuments(
       DATABASE_ID!,
       CLIENT_COLLECTION_ID!,
-      [Query.equal('userId', [userId])]
+      [Query.equal('$id', [userId])]
     );
 
     return parseStringify(clients.documents[0]);
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       'An error occurred while retrieving the client details:',
-      error
+      error.message || error
     );
   }
 };
@@ -73,7 +77,7 @@ export const registerClient = async ({ ...client }: RegisterUserParams) => {
       DATABASE_ID!,
       CLIENT_COLLECTION_ID!,
       ID.unique(),
-      client
+      { ...client }
     );
 
     return parseStringify(newClient);

@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -22,7 +22,6 @@ import toast from 'react-hot-toast';
 
 const RegisterForm = ({ user, company }: { user: User; company: string }) => {
   const router = useRouter();
-  const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof ClientFormValidation>>({
@@ -42,18 +41,15 @@ const RegisterForm = ({ user, company }: { user: User; company: string }) => {
         userId: user.$id,
         name: values.name,
         phone: values.phone,
+        company: company,
         gender: values.gender.toLocaleLowerCase() as Gender,
         privacyConsent: values.privacyConsent,
-        company: company,
       };
 
       const newClient = await registerClient(client);
 
-      // remove register from path
-      const newPath = path?.split('/').slice(0, -1).join('/');
-
       if (newClient) {
-        router.push(`${newPath}/new-appointment`);
+        router.push(`/${company}/clients/${newClient.$id}/new-appointment`);
       }
     } catch (error) {
       console.log(error);

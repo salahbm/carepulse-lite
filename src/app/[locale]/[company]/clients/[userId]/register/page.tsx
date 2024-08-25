@@ -6,6 +6,8 @@ import RegisterForm from '@/components/forms/register';
 
 const Register = async ({ params: { userId, company } }: SearchParamProps) => {
   const user = await getUser(userId);
+  console.log(userId);
+
   const client = await getClient(userId);
 
   if (client) redirect(`/${company}/clients/${userId}/new-appointment`);
