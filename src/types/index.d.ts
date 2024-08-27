@@ -39,3 +39,18 @@ declare type UpdateAppointmentParams = {
   appointment: Appointment;
   type: string;
 };
+
+declare interface SetUpCompanyParams extends TCompany {
+  name: string;
+  address: string | undefined;
+  phone: string;
+  businessId: string;
+  companyType: string;
+  logoUrl?: string;
+  keywords: string;
+  ownerFullName: string;
+  ownerPhone?: string;
+  gender: Gender;
+  adminPwd: string;
+  logo: FormData | undefined;
+}

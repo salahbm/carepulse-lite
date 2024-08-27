@@ -10,8 +10,7 @@ import { z } from 'zod';
 import { Form, FormControl } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { SelectItem } from '@/components/ui/select';
-import { Doctors, GenderOptions, IdentificationTypes } from '@/constants';
+import { GenderOptions } from '@/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-phone-number-input/style.css';
@@ -19,6 +18,8 @@ import { CompanyFormValidation } from '@/lib/validation';
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import { FileUploader } from '../shared/file-uploader';
 import SubmitButton from '../shared/submit-btn';
+import { registerCompany } from '@/lib/actions/company.actions';
+import toast from 'react-hot-toast';
 
 const CompanyForm = () => {
   const router = useRouter();
@@ -36,39 +37,50 @@ const CompanyForm = () => {
       companyType: '',
       businessId: '',
       keywords: '',
-      logoUrl: '',
       adminPwd: '',
+      privacyConsent: false,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof CompanyFormValidation>) => {
+    console.log('====================================');
+    console.log('CLICKED');
+    console.log('====================================');
+    if (values.privacyConsent === false) {
+      return toast.error('Please accept privacy policy');
+    }
     setIsLoading(true);
 
     // Store file info in form data as
     let formData;
-    // if (
-    //   values.logoUrl &&
-    //   values.logoUrl?.length > 0
-    // ) {
-    //   const blobFile = new Blob([values.identificationDocument[0]], {
-    //     type: values.identificationDocument[0].type,
-    //   });
+    if (values.logo && values.logo?.length > 0) {
+      const blobFile = new Blob([values.logo[0]], {
+        type: values.logo[0].type,
+      });
 
-    //   formData = new FormData();
-    //   formData.append("blobFile", blobFile);
-    //   formData.append("fileName", values.identificationDocument[0].name);
-    // }
+      formData = new FormData();
+      formData.append('blobFile', blobFile);
+      formData.append('fileName', values.logo[0].name);
+    }
 
     try {
-      //   const patient = {
-      //     name: values.name,
-      //     phone: values.phone,
-      //     gender: values.gender,
-      //     address: values.address,
-      //     identificationDocument: values.identificationDocument
-      //       ? formData
-      //       : undefined,
-      //   };
+      const company = {
+        ownerFullName: values.ownerFullName,
+        ownerPhone: values.ownerPhone,
+        businessId: values.businessId,
+        gender: values.gender.toLocaleLowerCase() as Gender,
+        name: values.name,
+        phone: values.phone,
+        address: values.address,
+        companyType: values.companyType,
+        keywords: values.keywords,
+        adminPwd: values.adminPwd,
+        logo: values.logo ? formData : undefined,
+      };
+      const newCompany = await registerCompany(company);
+      console.log('====================================');
+      console.log(newCompany);
+      console.log('====================================');
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +99,7 @@ const CompanyForm = () => {
           <p className="text-dark-700">Let us know more about yourself.</p>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-2">
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Personal Information</h2>
           </div>
@@ -103,6 +115,7 @@ const CompanyForm = () => {
               placeholder="John Doe"
               iconSrc="/assets/icons/user.svg"
               iconAlt="user"
+              label="Owner Full Name"
             />
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
@@ -196,20 +209,18 @@ const CompanyForm = () => {
               placeholder="Enter your keywords with comma"
             />
             <CustomFormField
-              iconSrc="/assets/icons/lock.svg"
-              iconAlt="Lock"
-              fieldType={FormFieldType.PASSWORD}
+              fieldType={FormFieldType.INPUT}
               control={form.control}
-              name="adminPwd"
-              label="Admin Password"
-              placeholder="Enter your admin password"
+              name="companyType"
+              label="Company Type"
+              placeholder="Enter your company type"
             />
           </div>
 
           <CustomFormField
             fieldType={FormFieldType.SKELETON}
             control={form.control}
-            name="identificationDocument"
+            name="logo"
             label="Scanned Copy of Identification Document"
             renderSkeleton={(field) => (
               <FormControl>
@@ -221,30 +232,31 @@ const CompanyForm = () => {
 
         <section className="space-y-6">
           <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Admin Page Details</h2>
+            <p className="text-dark-700">
+              Enter your admin password. PLEASE DO NOT SHARE
+            </p>
+          </div>
+          <CustomFormField
+            iconSrc="/assets/icons/lock.svg"
+            iconAlt="Lock"
+            fieldType={FormFieldType.PASSWORD}
+            control={form.control}
+            name="adminPwd"
+            label="Admin Password"
+            placeholder="Enter your admin password"
+          />
+        </section>
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
             <h2 className="sub-header">Consent and Privacy</h2>
           </div>
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
             control={form.control}
-            name="treatmentConsent"
-            label="I consent to receive treatment for my health condition."
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
-            name="disclosureConsent"
-            label="I consent to the use and disclosure of my health
-            information for treatment purposes."
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
             name="privacyConsent"
-            label="I acknowledge that I have reviewed and agree to the
-            privacy policy"
+            label="I consent to BookingUz collecting, using, and disclosing my personal information."
           />
         </section>
 

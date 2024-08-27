@@ -1,9 +1,14 @@
 'use server';
 import { ID, Query } from 'node-appwrite';
+import { InputFile } from 'node-appwrite/file';
 import {
+  BUCKET_ID,
   COMPANY_COLLECTION_ID,
   DATABASE_ID,
   databases,
+  ENDPOINT,
+  PROJECT_ID,
+  storage,
 } from '../appwrite.config';
 import { parseStringify } from '../utils';
 import { z } from 'zod';
@@ -53,21 +58,37 @@ export const getCompany = async (company: string) => {
 };
 
 // CREATE COMPANY
-export const registerCompany = async (
-  data: z.infer<typeof CompanyFormValidation>
-) => {
+export const registerCompany = async ({
+  logo,
+  ...data
+}: SetUpCompanyParams) => {
   try {
+    let file;
+    if (logo) {
+      const blobFile = logo?.get('blobFile');
+      const fileName = logo?.get('fileName') as string;
+
+      // Ensure the blob is converted to ArrayBuffer first
+      // @ts-expect-error ts(2322)
+      const arrayBuffer = await blobFile!.arrayBuffer();
+      const inputFile = InputFile.fromBuffer(
+        Buffer.from(arrayBuffer),
+        fileName
+      );
+
+      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
+    }
+
     // Create new client document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
     const newCompany = await databases.createDocument(
-      ID.unique(),
       DATABASE_ID!,
       COMPANY_COLLECTION_ID!,
+      ID.unique(),
       {
-        name: data.name,
-        phone: data.phone,
-        ownerFullName: data.ownerFullName,
-        ownerPhone: data.ownerPhone,
-        gender: data.gender,
+        logoUrl: file?.$id
+          ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view??project=${PROJECT_ID}`
+          : null,
+        ...data,
       }
     );
     return parseStringify(newCompany);

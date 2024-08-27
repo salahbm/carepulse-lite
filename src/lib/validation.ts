@@ -94,6 +94,7 @@ export const CompanyFormValidation = z.object({
   companyType: z.string().min(2, 'Company type must be at least 2 characters'),
   businessId: z.string().min(7, 'Business ID must be at least 7 characters'),
   keywords: z.string().min(2, 'Keywords must be at least 2 characters'),
-  logoUrl: z.string().optional(),
+  logo: z.custom<File[]>().optional(),
   adminPwd: z.string().min(6, 'Password must be at least 6 characters'),
+  privacyConsent: z.boolean().default(false),
 });
