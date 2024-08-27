@@ -1,11 +1,13 @@
 'use server';
-import { Query } from 'node-appwrite';
+import { ID, Query } from 'node-appwrite';
 import {
   COMPANY_COLLECTION_ID,
   DATABASE_ID,
   databases,
 } from '../appwrite.config';
 import { parseStringify } from '../utils';
+import { z } from 'zod';
+import { CompanyFormValidation } from '../validation';
 
 // GET SEARCHED COMPANY
 export const searchCompany = async (name: string) => {
@@ -47,5 +49,29 @@ export const getCompany = async (company: string) => {
       'An error occurred while retrieving the client details:',
       error
     );
+  }
+};
+
+// CREATE COMPANY
+export const registerCompany = async (
+  data: z.infer<typeof CompanyFormValidation>
+) => {
+  try {
+    // Create new client document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
+    const newCompany = await databases.createDocument(
+      ID.unique(),
+      DATABASE_ID!,
+      COMPANY_COLLECTION_ID!,
+      {
+        name: data.name,
+        phone: data.phone,
+        ownerFullName: data.ownerFullName,
+        ownerPhone: data.ownerPhone,
+        gender: data.gender,
+      }
+    );
+    return parseStringify(newCompany);
+  } catch (error) {
+    console.log('An error occurred while creating a new company:', error);
   }
 };
