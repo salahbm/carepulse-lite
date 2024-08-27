@@ -12,13 +12,14 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { GenderOptions } from '@/constants';
 
-import 'react-datepicker/dist/react-datepicker.css';
-import 'react-phone-number-input/style.css';
 import { CompanyFormValidation } from '@/lib/validation';
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import { FileUploader } from '../shared/file-uploader';
 import SubmitButton from '../shared/submit-btn';
 import { registerCompany } from '@/lib/actions/company.actions';
+
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-phone-number-input/style.css';
 import toast from 'react-hot-toast';
 
 const CompanyForm = () => {
@@ -43,9 +44,6 @@ const CompanyForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof CompanyFormValidation>) => {
-    console.log('====================================');
-    console.log('CLICKED');
-    console.log('====================================');
     if (values.privacyConsent === false) {
       return toast.error('Please accept privacy policy');
     }
@@ -78,9 +76,10 @@ const CompanyForm = () => {
         logo: values.logo ? formData : undefined,
       };
       const newCompany = await registerCompany(company);
-      console.log('====================================');
-      console.log(newCompany);
-      console.log('====================================');
+
+      if (newCompany) {
+        router.push(`/set-up/${newCompany.name}`);
+      }
     } catch (error) {
       console.log(error);
     }

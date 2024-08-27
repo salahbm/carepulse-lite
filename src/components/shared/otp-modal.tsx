@@ -26,7 +26,6 @@ export const PasskeyModal = () => {
   const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
-  console.log(path);
 
   const encryptedKey =
     typeof window !== 'undefined'
