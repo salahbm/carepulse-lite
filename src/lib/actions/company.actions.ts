@@ -11,20 +11,15 @@ import {
   storage,
 } from '../appwrite.config';
 import { parseStringify } from '../utils';
-import { z } from 'zod';
-import { CompanyFormValidation } from '../validation';
 
 // GET SEARCHED COMPANY
 export const searchCompany = async (name: string) => {
   try {
-    console.log(DATABASE_ID, '-', COMPANY_COLLECTION_ID!);
-
     const companies = await databases.listDocuments(
       DATABASE_ID!,
       COMPANY_COLLECTION_ID!,
-      [Query.startsWith('name', name)]
+      [Query.startsWith('name', name), Query.equal('isVerified', true)]
     );
-    console.log(companies);
 
     if (companies.documents.length > 0) {
       return companies.documents.map((doc) => parseStringify(doc));
@@ -39,6 +34,7 @@ export const searchCompany = async (name: string) => {
     );
   }
 };
+
 // GET SEARCHED COMPANY
 export const getCompany = async (company: string) => {
   try {

@@ -21,7 +21,6 @@ export const columns: ColumnDef<Appointment>[] = [
     header: 'Client',
     cell: ({ row }) => {
       const appointment = row.original;
-      console.log(appointment.client.name);
 
       return <p className="text-14-medium ">{appointment.client.name}</p>;
     },

@@ -58,8 +58,6 @@ export const AppointmentForm = ({
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
-    console.log(values);
-
     setIsLoading(true);
     let status;
     switch (type) {
@@ -73,7 +71,6 @@ export const AppointmentForm = ({
         status = 'pending';
     }
 
-    console.log(values);
     try {
       if (type === 'create' && clientId) {
         const appointment = {
@@ -85,7 +82,6 @@ export const AppointmentForm = ({
           master: company.name,
           client: clientId,
         };
-        console.log(appointment);
 
         const newAppointment = await createAppointment(appointment);
         if (newAppointment) {
@@ -113,7 +109,6 @@ export const AppointmentForm = ({
         }
       }
     } catch (error) {
-      console.log(error);
       toast.error('Something went wrong!');
     }
     setIsLoading(false);

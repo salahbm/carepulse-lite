@@ -19,10 +19,10 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { decryptKey, encryptKey } from '@/lib/utils';
+import { TCompany } from '@/types/appwrite.types';
 
-export const PasskeyModal = () => {
+export const PasskeyModal = ({ data }: { data: TCompany }) => {
   const router = useRouter();
-  const path = usePathname();
   const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
@@ -34,19 +34,20 @@ export const PasskeyModal = () => {
 
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
-
-    if (path)
-      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-        setOpen(false);
-        router.push(`/${path}/admin`);
-      } else {
-        setOpen(true);
-      }
+    console.log('====================================');
+    console.log(accessKey);
+    console.log('====================================');
+    if (accessKey === data.adminPwd) {
+      setOpen(false);
+      // router.push(`/${data.name}/admin`);
+    } else {
+      setOpen(true);
+    }
   }, [encryptedKey]);
 
   const closeModal = () => {
     setOpen(false);
-    router.replace(`//${path}`);
+    router.push(`/${data.name}`);
   };
 
   const validatePasskey = (
@@ -54,7 +55,7 @@ export const PasskeyModal = () => {
   ) => {
     e.preventDefault();
 
-    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+    if (passkey === data.adminPwd) {
       const encryptedKey = encryptKey(passkey);
 
       localStorage.setItem('accessKey', encryptedKey);

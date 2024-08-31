@@ -1,14 +1,22 @@
 import { ClientForm } from '@/components/forms/client';
 import { PasskeyModal } from '@/components/shared/otp-modal';
+import { getCompany } from '@/lib/actions/company.actions';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Home = ({ params: { company }, searchParams }: SearchParamProps) => {
+const Home = async ({
+  params: { company },
+  searchParams,
+}: SearchParamProps) => {
   const isAdmin = searchParams?.admin === 'true';
+  const data = await getCompany(company);
+  console.log('====================================');
+  console.log(data);
+  console.log('====================================');
 
   return (
     <div className="flex h-screen max-h-screen">
-      {isAdmin && <PasskeyModal />}
+      {isAdmin && data && <PasskeyModal data={data} />}
 
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
