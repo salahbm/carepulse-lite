@@ -1,42 +1,64 @@
+import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-import { defaultLocale, locales, localePrefix } from '../i18n.config';
-import createMiddleware from 'next-intl/middleware';
-import { cookies } from 'next/headers';
+import { routing } from './i18n/routing';
 
-const intlMiddleware = createMiddleware({
+const { defaultLocale, localePrefix, locales } = routing;
+
+const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale,
   localePrefix,
 });
 
-const isAuthRoute = 'sign-in';
+// Define auth routes and protected pages
+const authRoutes = ['/sign-in', '/sign-up', '/forgot-pwd'];
+// Use regular expressions to match each protected page and its subpaths
+const protectedPages = [
+  /^\/clients\/?/,
+  /^\/clients\/\d+\/?/,
+  /^\/admin\/?/,
+  /^\/admin\/\d+\/?/,
+];
 
-export default async function middleware(request: NextRequest) {
-  // // Check for authentication cookie
-  // const isLoggedIn =
-  //   !!cookies.get('accessKey') ||
-  //   !!cookies.get('accessKey');
+export async function middleware(request: NextRequest) {
+  // Check for authentication cookie
+  const isLoggedIn = request.cookies.has('session-token');
 
-  // // Extract locale from the pathname
+  const pathname = request.nextUrl.pathname;
 
-  // const pathname = request.nextUrl.pathname;
+  // Check if the request is for an auth route
+  const isAuthRoute = authRoutes.includes(pathname);
 
-  // // Handle authenticated user on auth routes
-  // if (isAuthRoute) {
-  //   if (isLoggedIn) {
-  //     return NextResponse.redirect(new URL(`/dashboard`, request.nextUrl));
-  //   }
-  //   return NextResponse.next();
-  // }
+  // Redirect authenticated user away from auth routes
+  if (isAuthRoute && isLoggedIn) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
-  // // Handle unauthenticated user on protected routes
-  // if (!isLoggedIn) {
-  //   return NextResponse.redirect(new URL(`/sign-in`, request.nextUrl));
-  // }
+  // Redirect unauthenticated user trying to access protected routes
+  const isProtectedPage = protectedPages.some((pattern) =>
+    pattern.test(pathname)
+  );
+  if (!isLoggedIn && isProtectedPage) {
+    return NextResponse.redirect(new URL('/sign-in', request.url));
+  }
 
-  return intlMiddleware(request);
+  // Apply locale middleware, excluding specific paths
+  if (
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.includes('/favicon.ico')
+  ) {
+    return intlMiddleware(request);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: [
+    '/((?!.*\\..*|_next|favicon\\.ico).*)', // Exclude files and Next.js internals
+    '/',
+    '/(api|trpc)(.*)', // API and trpc endpoints
+    '/(uz|ru|en)/:path*', // Locale-specific paths
+  ],
 };
