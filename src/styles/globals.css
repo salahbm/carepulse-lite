@@ -1,3 +1,4 @@
+@import '@/styles/font.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -61,10 +62,28 @@
     background: transparent;
   }
 
-  input:-webkit-autofill:disabled,
-  textarea:-webkit-autofill:disabled,
-  select:-webkit-autofill:disabled {
-    -webkit-text-fill-color: var(--background) !important;
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: var(--transition) 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px var(--background) !important;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply relative flex-1 overflow-y-auto px-[5%];
+  }
+
+  .sub-container {
+    @apply mx-auto flex size-full flex-col py-10;
+  }
+
+  .side-img {
+    @apply hidden h-full object-cover md:block;
   }
 }
 
@@ -130,10 +149,11 @@
 /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
 .PhoneInputInput {
   outline: none;
-  margin-left: 4px;
-  background: #1a1d21;
+  margin-left: 6px;
+  background: var(--background);
   font-size: 14px;
   font-weight: 500;
+  height: 40px;
 }
 
 .PhoneInputInput::placeholder {

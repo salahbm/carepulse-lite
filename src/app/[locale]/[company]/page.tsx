@@ -2,7 +2,8 @@ import { ClientForm } from '@/components/forms/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Home = async ({ params: { company } }: SearchParamProps) => {
+const Home = async ({ params }: SearchParamProps) => {
+  const { company } = await params;
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">

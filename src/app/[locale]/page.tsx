@@ -18,7 +18,7 @@ const Home = () => {
 
           <SearchForm />
 
-          <div className="text-14-regular mt-20 flex justify-between">
+          <div className="font-body-1 mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Booking uz
             </p>

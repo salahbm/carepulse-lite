@@ -51,7 +51,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex px-3 py-2 border border-dark-500 bg-background rounded">
+        <div className="flex px-3 py-2 border bg-background rounded">
           {props.iconSrc && (
             <Image
               src={props.iconSrc}
@@ -89,10 +89,11 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             defaultCountry="UZ"
             placeholder={props.placeholder}
             international
+            autoComplete="true"
             withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
-            className="input-phone"
+            className="mt-2  rounded px-3 font-body-1 border bg-background placeholder:text-dark-600 py-2"
           />
         </FormControl>
       );
@@ -113,7 +114,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-md border  bg-background">
           <Image
             src="/assets/icons/calendar.svg"
             height={24}
@@ -152,7 +153,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.PASSWORD:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-md border  bg-background">
           {props.iconSrc && (
             <Image
               src={props.iconSrc}
