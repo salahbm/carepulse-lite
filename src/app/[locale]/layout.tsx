@@ -40,7 +40,7 @@ export default async function IndexLayout({
     <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-dark-300 font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased',
           fontSans.variable
         )}
       >
