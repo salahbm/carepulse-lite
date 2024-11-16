@@ -48,14 +48,14 @@ export const AppointmentModal = ({
             Please fill in the following details to {type} appointment
           </DialogDescription>
         </DialogHeader>
-
+        {/* 
         <AppointmentForm
           userId={userId}
           clientId={clientId}
           type={type}
           appointment={appointment}
           setOpen={setOpen}
-        />
+        /> */}
       </DialogContent>
     </Dialog>
   );

@@ -1,23 +1,10 @@
 import { ClientForm } from '@/components/forms/client';
-import { PasskeyModal } from '@/components/shared/otp-modal';
-import { getCompany } from '@/lib/actions/company.actions';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Home = async ({
-  params: { company },
-  searchParams,
-}: SearchParamProps) => {
-  const isAdmin = searchParams?.admin === 'true';
-  const data = await getCompany(company);
-  console.log('====================================');
-  console.log(data);
-  console.log('====================================');
-
+const Home = async ({ params: { company } }: SearchParamProps) => {
   return (
     <div className="flex h-screen max-h-screen">
-      {isAdmin && data && <PasskeyModal data={data} />}
-
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Image
@@ -35,7 +22,7 @@ const Home = async ({
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 Booking uz
             </p>
-            <Link href={`/${company}/?admin=true`} className="text-green-500">
+            <Link href={`/${company}/admin`} className="text-green-500">
               Admin
             </Link>
           </div>

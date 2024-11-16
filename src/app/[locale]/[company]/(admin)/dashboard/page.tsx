@@ -6,8 +6,8 @@ import { DataTable } from '@/components/table/DataTable';
 import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
 import { StatCard } from '@/components/shared/stats-card';
 
-const AdminPage = async () => {
-  const appointments = await getRecentAppointmentList();
+const Dashboard = async () => {
+  // const appointments = await getRecentAppointmentList();
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
@@ -33,7 +33,7 @@ const AdminPage = async () => {
           </p>
         </section>
 
-        <section className="admin-stat">
+        {/* <section className="admin-stat">
           <StatCard
             type="appointments"
             count={appointments.scheduledCount}
@@ -52,12 +52,12 @@ const AdminPage = async () => {
             label="Cancelled appointments"
             icon={'/assets/icons/cancelled.svg'}
           />
-        </section>
+        </section> */}
 
-        <DataTable columns={columns} data={appointments.documents} />
+        {/* <DataTable columns={columns} data={appointments.documents} /> */}
       </main>
     </div>
   );
 };
 
-export default AdminPage;
+export default Dashboard;

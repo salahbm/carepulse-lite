@@ -36,6 +36,7 @@ export const AppointmentForm = ({
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
+  console.log(`type:`, type);
   const router = useRouter();
   const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);

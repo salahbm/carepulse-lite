@@ -58,7 +58,7 @@ export const PasskeyModal = ({ data }: { data: TCompany }) => {
     if (passkey === data.adminPwd) {
       const encryptedKey = encryptKey(passkey);
 
-      localStorage.setItem('accessKey', encryptedKey);
+      window.localStorage.setItem('accessKey', encryptedKey);
 
       setOpen(false);
     } else {
