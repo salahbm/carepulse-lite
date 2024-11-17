@@ -114,7 +114,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       );
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border  bg-background">
+        <div className="flex rounded px-3 py-2 border bg-background flex-row items-center">
           <Image
             src="/assets/icons/calendar.svg"
             height={24}
@@ -130,7 +130,10 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               timeInputLabel="Time:"
               dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
               timeFormat="HH:mm"
-              wrapperClassName="date-picker"
+              timeIntervals={15}
+              disabled={props.disabled}
+              className="h-10"
+              wrapperClassName="w-full overflow-hidden"
               minDate={new Date()}
             />
           </FormControl>
@@ -190,11 +193,11 @@ const CustomFormField = (props: CustomProps) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {props.fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel className="shad-input-label">{label}</FormLabel>
+            <FormLabel>{label}</FormLabel>
           )}
           <RenderInput field={field} props={props} />
 
-          <FormMessage className="shad-error" />
+          <FormMessage />
         </FormItem>
       )}
     />

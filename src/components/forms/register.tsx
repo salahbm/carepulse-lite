@@ -114,7 +114,7 @@ const RegisterForm = ({ user, company }: { user: User; company: string }) => {
                     {GenderOptions.map((option, i) => (
                       <div key={option + i} className="radio-group">
                         <RadioGroupItem value={option} id={option} />
-                        <Label htmlFor={option} className="cursor-pointer">
+                        <Label htmlFor={option} className="cursor-pointer ml-2">
                           {option}
                         </Label>
                       </div>
@@ -130,21 +130,6 @@ const RegisterForm = ({ user, company }: { user: User; company: string }) => {
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Consent and Privacy</h2>
           </div>
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
-            name="treatmentConsent"
-            label="I consent to receive treatment for my health condition."
-          />
-
-          <CustomFormField
-            fieldType={FormFieldType.CHECKBOX}
-            control={form.control}
-            name="disclosureConsent"
-            label="I consent to the use and disclosure of my health
-            information for treatment purposes."
-          />
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}

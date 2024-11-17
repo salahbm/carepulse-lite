@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -20,6 +20,7 @@ import {
   createAppointment,
   updateAppointment,
 } from '@/lib/actions/appointment.actions';
+import { appointmentButtonLabel, appointmentType } from '@/lib/helpers';
 
 export const AppointmentForm = ({
   userId,
@@ -36,17 +37,21 @@ export const AppointmentForm = ({
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
-  console.log(`type:`, type);
   const router = useRouter();
   const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
+  const buttonLabel = appointmentButtonLabel(type);
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      master: appointment ? appointment?.master : '',
+      company: appointment
+        ? appointment?.company
+        : company.name
+        ? company.name
+        : '',
       schedule: appointment
         ? new Date(appointment?.schedule!)
         : new Date(Date.now()),
@@ -59,30 +64,22 @@ export const AppointmentForm = ({
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
+    console.log(`values:`, values);
     setIsLoading(true);
-    let status;
-    switch (type) {
-      case 'schedule':
-        status = 'scheduled';
-        break;
-      case 'cancel':
-        status = 'cancelled';
-        break;
-      default:
-        status = 'pending';
-    }
+    const status = appointmentType(type);
 
     try {
       if (type === 'create' && clientId) {
         const appointment = {
-          schedule: new Date(values.schedule),
-          reason: values.reason!,
-          note: values.note,
-          status: status as Status,
           userId,
-          master: company.name,
           client: clientId,
+          company: company.name,
+          reason: values.reason!,
+          schedule: new Date(values.schedule),
+          status: status as Status,
+          note: values.note,
         };
+        console.log(`appointment:`, appointment);
 
         const newAppointment = await createAppointment(appointment);
         if (newAppointment) {
@@ -95,7 +92,7 @@ export const AppointmentForm = ({
           userId,
           appointmentId: appointment?.$id!,
           appointment: {
-            master: values.master,
+            company: values.company,
             schedule: new Date(values.schedule),
             status: status as Status,
             cancellationReason: values.cancellationReason,
@@ -110,22 +107,11 @@ export const AppointmentForm = ({
         }
       }
     } catch (error) {
-      toast.error('Something went wrong!');
+      toast.error('Server: Something went wrong!');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
-
-  let buttonLabel;
-  switch (type) {
-    case 'cancel':
-      buttonLabel = 'Cancel Appointment';
-      break;
-    case 'schedule':
-      buttonLabel = 'Schedule Appointment';
-      break;
-    default:
-      buttonLabel = 'Submit Appointment';
-  }
 
   return (
     <Form {...form}>

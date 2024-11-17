@@ -34,7 +34,7 @@ export const ClientFormValidation = z.object({
 });
 
 export const CreateAppointmentSchema = z.object({
-  master: z.string().min(2, 'Select at least one doctor'),
+  company: z.string().min(2, 'Company is not selected'),
   schedule: z.coerce.date(),
   reason: z
     .string()
@@ -45,7 +45,7 @@ export const CreateAppointmentSchema = z.object({
 });
 
 export const ScheduleAppointmentSchema = z.object({
-  master: z.string().min(2, 'Select at least one doctor'),
+  company: z.string().min(2, 'Select at least one company'),
   schedule: z.coerce.date(),
   reason: z.string().optional(),
   note: z.string().optional(),
@@ -53,7 +53,7 @@ export const ScheduleAppointmentSchema = z.object({
 });
 
 export const CancelAppointmentSchema = z.object({
-  master: z.string().min(2, 'Select at least one doctor'),
+  company: z.string().min(2, 'Select at least one company'),
   schedule: z.coerce.date(),
   reason: z.string().optional(),
   note: z.string().optional(),
