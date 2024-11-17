@@ -34,9 +34,7 @@ export const PasskeyModal = ({ data }: { data: TCompany }) => {
 
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
-    console.log('====================================');
-    console.log(accessKey);
-    console.log('====================================');
+
     if (accessKey === data.adminPwd) {
       setOpen(false);
       // router.push(`/${data.name}/admin`);

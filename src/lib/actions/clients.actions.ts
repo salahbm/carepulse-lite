@@ -66,7 +66,7 @@ export const getClient = async (userId: string) => {
     const clients = await databases.listDocuments(
       DATABASE_ID!,
       CLIENT_COLLECTION_ID!,
-      [Query.equal('$id', [userId])]
+      [Query.equal('userId', [userId])]
     );
 
     if (!clients.documents || clients.documents.length === 0) {

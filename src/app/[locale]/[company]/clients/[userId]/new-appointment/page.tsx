@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 const Appointment = async ({ params }: SearchParamProps) => {
   const { userId, company: companyName } = await params;
   const client = await getClient(userId);
+  console.log(`client:`, client);
   const company = await getCompany(companyName);
   if (!client) redirect(`/${company}/clients/${userId}/register`);
   if (!company) redirect(`/${company}`);
@@ -25,8 +26,9 @@ const Appointment = async ({ params }: SearchParamProps) => {
           />
 
           <AppointmentForm
-            clientId={client?.$id}
             userId={userId}
+            clientId={client?.$id}
+            clientName={client?.name}
             company={company}
             type="create"
           />

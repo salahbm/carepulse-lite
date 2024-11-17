@@ -42,6 +42,7 @@ export const CreateAppointmentSchema = z.object({
     .max(500, 'Reason must be at most 500 characters'),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
+  clientName: z.string().min(2, 'Client name is required'),
 });
 
 export const ScheduleAppointmentSchema = z.object({
@@ -50,6 +51,7 @@ export const ScheduleAppointmentSchema = z.object({
   reason: z.string().optional(),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
+  clientName: z.string().min(2, 'Client name is required'),
 });
 
 export const CancelAppointmentSchema = z.object({
@@ -61,6 +63,7 @@ export const CancelAppointmentSchema = z.object({
     .string()
     .min(2, 'Reason must be at least 2 characters')
     .max(500, 'Reason must be at most 500 characters'),
+  clientName: z.string().min(2, 'Client name is required'),
 });
 
 export function getAppointmentSchema(type: string) {

@@ -49,7 +49,7 @@ const RegisterForm = ({ user, company }: { user: User; company: string }) => {
       const newClient = await registerClient(client);
 
       if (newClient) {
-        router.push(`/${company}/clients/${newClient.$id}/new-appointment`);
+        router.push(`/${company}/clients/${newClient.userId}/new-appointment`);
       }
     } catch (error) {
       console.log(error);

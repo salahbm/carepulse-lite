@@ -14,10 +14,8 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({
   children,
-  params: { locale, company },
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string; company: string };
 }>) {
   return (
     <main className="relative  mx-auto">

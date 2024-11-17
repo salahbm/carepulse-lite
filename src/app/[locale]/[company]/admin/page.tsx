@@ -7,7 +7,8 @@ import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
 import { StatCard } from '@/components/shared/stats-card';
 
 const Dashboard = async () => {
-  // const appointments = await getRecentAppointmentList();
+  const appointments = await getRecentAppointmentList();
+  console.log(`appointments:`, appointments);
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">

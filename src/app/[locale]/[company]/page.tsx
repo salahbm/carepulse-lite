@@ -7,7 +7,6 @@ const Home = async ({ params }: SearchParamProps) => {
   const { company } = await params;
   const cookie = await cookies();
   const user = cookie.get('user')?.value;
-  console.log(`user:`, user);
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">

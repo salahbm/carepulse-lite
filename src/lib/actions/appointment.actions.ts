@@ -16,7 +16,6 @@ import { formatDateTime, parseStringify } from '../utils';
 export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
-  console.log(`appointment:`, appointment);
   try {
     const newAppointment = await databases.createDocument(
       DATABASE_ID!,

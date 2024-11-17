@@ -25,6 +25,7 @@ import { appointmentButtonLabel, appointmentType } from '@/lib/helpers';
 export const AppointmentForm = ({
   userId,
   clientId,
+  clientName,
   company,
   type = 'create',
   appointment,
@@ -33,6 +34,7 @@ export const AppointmentForm = ({
   userId: string;
   clientId: string;
   company: TCompany;
+  clientName: string;
   type: 'create' | 'schedule' | 'cancel';
   appointment?: Appointment;
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -58,6 +60,11 @@ export const AppointmentForm = ({
       reason: appointment ? appointment.reason : '',
       note: appointment?.note || '',
       cancellationReason: appointment?.cancellationReason || '',
+      clientName: appointment
+        ? appointment.clientName
+        : clientName
+        ? clientName
+        : '',
     },
   });
 
@@ -77,6 +84,7 @@ export const AppointmentForm = ({
           schedule: new Date(values.schedule),
           status: status as Status,
           note: values.note,
+          clientName: values.clientName,
         };
 
         const newAppointment = await createAppointment(appointment);
@@ -111,7 +119,6 @@ export const AppointmentForm = ({
       setIsLoading(false);
     }
   };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
