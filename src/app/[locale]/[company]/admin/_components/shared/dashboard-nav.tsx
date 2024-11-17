@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/hook/common/use-sidebar';
@@ -36,8 +36,8 @@ export function DashboardNav({
           const Icon = Icons[item.icon || 'arrowRight'];
           return (
             item.href && (
-              <>
-                <Button key={index}>
+              <React.Fragment key={index}>
+                <Button>
                   <Link
                     href={item.disabled ? '/' : item.href}
                     className={cn(
@@ -61,7 +61,7 @@ export function DashboardNav({
                 <div className={!isMinimized ? 'hidden' : 'inline-block'}>
                   {item.title}
                 </div>
-              </>
+              </React.Fragment>
             )
           );
         })}

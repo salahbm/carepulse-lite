@@ -30,7 +30,6 @@ declare type CreateAppointmentParams = {
   schedule: Date;
   status: Status;
   note: string | undefined;
-  clientName: string;
 };
 
 declare type UpdateAppointmentParams = {

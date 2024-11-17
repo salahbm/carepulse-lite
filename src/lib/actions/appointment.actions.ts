@@ -6,6 +6,7 @@ import { Appointment } from '@/types/appwrite.types';
 
 import {
   APPOINTMENT_COLLECTION_ID,
+  COMPANY_COLLECTION_ID,
   DATABASE_ID,
   databases,
   messaging,
@@ -50,21 +51,29 @@ export const getAppointment = async (appointmentId: string) => {
 };
 
 //  GET RECENT APPOINTMENTS
-export const getRecentAppointmentList = async () => {
+export const getRecentAppointmentList = async (company: string) => {
   try {
+    // Fetch the appointments
     const appointments = await databases.listDocuments(
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
       [Query.orderDesc('$createdAt')]
     );
 
+    // Initialize counts
     const initialCounts = {
       scheduledCount: 0,
       pendingCount: 0,
       cancelledCount: 0,
     };
 
-    const counts = (appointments.documents as Appointment[]).reduce(
+    // Filter by company if provided
+    const filteredDocuments = company
+      ? appointments.documents.filter((doc) => doc.company === company)
+      : appointments.documents;
+
+    // Calculate counts by status
+    const counts = (filteredDocuments as Appointment[]).reduce(
       (acc, appointment) => {
         switch (appointment.status) {
           case 'scheduled':
@@ -82,18 +91,20 @@ export const getRecentAppointmentList = async () => {
       initialCounts
     );
 
+    // Prepare the response data
     const data = {
-      totalCount: appointments.total,
+      totalCount: filteredDocuments.length, // Update totalCount for filtered results
       ...counts,
-      documents: appointments.documents,
+      documents: filteredDocuments,
     };
 
-    return parseStringify(data);
+    return parseStringify(data); // Ensure consistent return format
   } catch (error) {
     console.error(
       'An error occurred while retrieving the recent appointments:',
       error
     );
+    return null; // Return null explicitly in case of an error
   }
 };
 

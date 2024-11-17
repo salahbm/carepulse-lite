@@ -21,8 +21,10 @@ export const AppointmentModal = ({
   userId,
   appointment,
   type,
+  company,
 }: {
   clientId: string;
+  company: string;
   userId: string;
   appointment?: Appointment;
   type: 'schedule' | 'cancel';
@@ -48,9 +50,10 @@ export const AppointmentModal = ({
             Please fill in the following details to {type} appointment
           </DialogDescription>
         </DialogHeader>
-        {/* 
-        <AppointmentForm
+
+        {/* <AppointmentForm
           userId={userId}
+          company={company}
           clientId={clientId}
           type={type}
           appointment={appointment}
