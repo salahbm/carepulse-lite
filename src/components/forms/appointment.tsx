@@ -64,7 +64,6 @@ export const AppointmentForm = ({
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
-    console.log(`values:`, values);
     setIsLoading(true);
     const status = appointmentType(type);
 
@@ -79,13 +78,13 @@ export const AppointmentForm = ({
           status: status as Status,
           note: values.note,
         };
-        console.log(`appointment:`, appointment);
 
         const newAppointment = await createAppointment(appointment);
         if (newAppointment) {
           form.reset();
+          const fullUrl = `${window.location.origin}${path}/success?appointmentId=${newAppointment.$id}`;
+          router.push(fullUrl);
           toast.success('Appointment created successfully!');
-          router.push(`/${path}/success?appointmentId=${newAppointment.$id}`);
         }
       } else {
         const appointmentToUpdate = {

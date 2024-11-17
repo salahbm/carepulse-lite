@@ -1,9 +1,13 @@
 import { ClientForm } from '@/components/forms/client';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Home = async ({ params }: SearchParamProps) => {
   const { company } = await params;
+  const cookie = await cookies();
+  const user = cookie.get('user')?.value;
+  console.log(`user:`, user);
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
@@ -17,7 +21,7 @@ const Home = async ({ params }: SearchParamProps) => {
             priority
           />
 
-          <ClientForm />
+          <ClientForm user={user ? JSON.parse(user) : null} />
 
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">

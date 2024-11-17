@@ -66,7 +66,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               placeholder={props.placeholder}
               {...field}
               className="border-0 px-2"
-              autoComplete="off"
             />
           </FormControl>
         </div>

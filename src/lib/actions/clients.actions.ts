@@ -7,9 +7,18 @@ import {
   databases,
   users,
 } from '../appwrite.config';
+import { cookies } from 'next/headers';
 
 // CREATE USER
 export const createUser = async (user: CreateUserParams) => {
+  // Store data in Cookie to check if user is authenticated
+  const cookie = await cookies();
+  cookie.set('user', JSON.stringify(user), {
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+  });
+
   try {
     // Check if a user with the given name and phone number already exists
     const existingUserList = await users.list([
@@ -60,12 +69,18 @@ export const getClient = async (userId: string) => {
       [Query.equal('$id', [userId])]
     );
 
+    if (!clients.documents || clients.documents.length === 0) {
+      console.warn(`No client found for userId: ${userId}`);
+      return null; // Return null if the client does not exist
+    }
+
     return parseStringify(clients.documents[0]);
   } catch (error: any) {
     console.error(
       'An error occurred while retrieving the client details:',
       error.message || error
     );
+    return null; // Return null on error to avoid breaking the frontend
   }
 };
 

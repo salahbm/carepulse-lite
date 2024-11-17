@@ -15,7 +15,11 @@ import SubmitButton from '../shared/submit-btn';
 import { createUser } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
 
-export const ClientForm = () => {
+export const ClientForm = ({
+  user,
+}: {
+  user?: { name: string; phone: string };
+}) => {
   const router = useRouter();
   const path = usePathname();
   const [isLoading, setIsLoading] = useState(false);
@@ -23,8 +27,8 @@ export const ClientForm = () => {
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      name: '',
-      phone: '',
+      name: user?.name || '',
+      phone: user?.phone || '',
     },
   });
 
@@ -36,7 +40,6 @@ export const ClientForm = () => {
         name: values.name,
         phone: values.phone,
       };
-
       const newUser = await createUser(user);
       if (newUser) {
         router.push(`${path}/clients/${newUser.$id}/register`);

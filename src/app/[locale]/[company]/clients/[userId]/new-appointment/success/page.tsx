@@ -1,23 +1,26 @@
 import Image from 'next/image';
-import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
-import { Doctors } from '@/constants';
 import { getAppointment } from '@/lib/actions/appointment.actions';
 import { formatDateTime } from '@/lib/utils';
 import { getCompany } from '@/lib/actions/company.actions';
+import Link from 'next/link';
 
-const RequestSuccess = async ({
+const SuccessAppointment = async ({
   searchParams,
-  params: { userId, company: companyName },
+  params,
 }: SearchParamProps) => {
-  const appointmentId = (searchParams?.appointmentId as string) || '';
-  const appointment = await getAppointment(appointmentId);
+  const { userId, company: companyName } = params;
+  const { appointmentId } = searchParams;
+  if (!userId || !companyName || !appointmentId) {
+    console.error('Missing required parameters');
+    return <p>Error: Missing required parameters</p>;
+  }
+  const appointment = await getAppointment(appointmentId as string);
   const company = await getCompany(companyName);
 
   return (
-    <div className=" flex h-screen max-h-screen px-[5%]">
-      <div className="success-img">
+    <div className=" flex h-screen max-h-screen px-[5%] py-10">
+      <div className="flex flex-1 flex-col justify-center items-center">
         <Link href="/">
           <Image
             src="/assets/icons/logo-full.png"
@@ -28,21 +31,21 @@ const RequestSuccess = async ({
           />
         </Link>
 
-        <section className="flex flex-col items-center">
+        <section className="flex flex-col items-center my-6">
           <Image
             src="/assets/gifs/success.gif"
             height={300}
             width={280}
             alt="success"
           />
-          <h2 className="header mb-6 max-w-[600px] text-center">
+          <h2 className=" mb-6 max-w-[600px] text-center">
             Your <span className="text-green-500">appointment request</span> has
             been successfully submitted!
           </h2>
           <p>We&apos;ll be in touch shortly to confirm.</p>
         </section>
 
-        <section className="request-details">
+        <section className=" flex w-full flex-col items-center gap-8 border-y-2  py-8 md:w-fit md:flex-row">
           <p>Requested appointment details: </p>
           <div className="flex items-center gap-3">
             <Image
@@ -65,16 +68,16 @@ const RequestSuccess = async ({
           </div>
         </section>
 
-        <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/${company}/clients/${userId}/new-appointment`}>
+        <Button variant="outline" className="shad-primary-btn mt-6" asChild>
+          <Link href={`/${company.name}/clients/${userId}/new-appointment`}>
             New Appointment
           </Link>
         </Button>
 
-        <p className="copyright">© 2024 Booking uz</p>
+        <p className="font-body-1 mt-6">© 2024 Booking uz</p>
       </div>
     </div>
   );
 };
 
-export default RequestSuccess;
+export default SuccessAppointment;
