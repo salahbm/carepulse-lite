@@ -14,14 +14,9 @@ import { NavItem } from '@/types/admin';
 interface DashboardNavProps {
   items: NavItem[];
   setOpen?: Dispatch<SetStateAction<boolean>>;
-  isMobileNav?: boolean;
 }
 
-export function DashboardNav({
-  items,
-  setOpen,
-  isMobileNav = false,
-}: DashboardNavProps) {
+export function DashboardNav({ items, setOpen }: DashboardNavProps) {
   const path = usePathname();
   const { isMinimized } = useSidebar();
 
@@ -30,42 +25,38 @@ export function DashboardNav({
   }
 
   return (
-    <nav className="grid items-start gap-2">
-      <div>
-        {items.map((item, index) => {
-          const Icon = Icons[item.icon || 'arrowRight'];
-          return (
-            item.href && (
-              <React.Fragment key={index}>
-                <Button>
-                  <Link
-                    href={item.disabled ? '/' : item.href}
-                    className={cn(
-                      'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
-                      path === item.href ? 'bg-accent' : 'transparent',
-                      item.disabled && 'cursor-not-allowed opacity-80'
-                    )}
-                    onClick={() => {
-                      if (setOpen) setOpen(false);
-                    }}
-                  >
-                    <Icon className={`ml-3 size-5`} />
+    <nav
+      className={cn(
+        ' flex flex-col h-full duration-500',
+        !isMinimized ? 'w-fit items-start' : 'w-[76px] items-center'
+      )}
+    >
+      {items.map((item, index) => {
+        const Icon = Icons[item.icon || 'question'];
+        return (
+          item.href && (
+            <Button asChild key={index} variant="ghost">
+              <Link
+                href={item.disabled ? '/' : item.href}
+                className={cn(
+                  'flex items-center gap-2 overflow-hidden rounded',
+                  path === item.href ? 'bg-accent' : 'transparent',
+                  item.disabled && 'cursor-not-allowed opacity-80'
+                )}
+                onClick={() => {
+                  if (setOpen) setOpen(false);
+                }}
+              >
+                <Icon className="ml-2 size-5" />
 
-                    {isMobileNav || (!isMinimized && !isMobileNav) ? (
-                      <span className="mr-2 truncate">{item.title}</span>
-                    ) : (
-                      ''
-                    )}
-                  </Link>
-                </Button>
-                <div className={!isMinimized ? 'hidden' : 'inline-block'}>
-                  {item.title}
-                </div>
-              </React.Fragment>
-            )
-          );
-        })}
-      </div>
+                {!isMinimized && (
+                  <span className="mr-2 truncate">{item.title}</span>
+                )}
+              </Link>
+            </Button>
+          )
+        );
+      })}
     </nav>
   );
 }

@@ -29,6 +29,8 @@ import {
   User,
   User2Icon,
   X,
+  Clock,
+  ShieldQuestionIcon,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -63,4 +65,6 @@ export const Icons = {
   vacancy: BriefcaseBusiness,
   blogs: Newspaper,
   check: Check,
+  clock: Clock,
+  question: ShieldQuestionIcon,
 };

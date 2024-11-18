@@ -26,9 +26,11 @@ export default function AdminLayout({
       >
         <div className="relative">
           <Header />
-          <div className="flex  overflow-hidden">
+          <div className="flex overflow-hidden">
             <Sidebar />
-            <main className="flex-1 overflow-hidden pt-16">{children}</main>
+            <main className="flex-1 overflow-hidden pt-16 px-6">
+              {children}
+            </main>
           </div>
         </div>
       </Suspense>

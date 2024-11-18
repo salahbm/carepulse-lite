@@ -7,7 +7,7 @@ import UserNav from './user-nav';
 
 export default function Header() {
   return (
-    <div className="">
+    <>
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link
@@ -31,14 +31,13 @@ export default function Header() {
             </p>
           </Link>
         </div>
-        <div className={cn('block lg:!hidden')}>
-          <MobileSidebar />
-        </div>
+
+        <MobileSidebar />
 
         <div className="flex items-center gap-2">
           <UserNav />
         </div>
       </nav>
-    </div>
+    </>
   );
 }
