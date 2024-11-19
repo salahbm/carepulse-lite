@@ -13,36 +13,23 @@ type SidebarProps = {
 
 export default function Sidebar({ className }: SidebarProps) {
   const { isMinimized, toggle } = useSidebar();
-  const [status, setStatus] = useState(false);
 
-  const handleToggle = () => {
-    setStatus(true);
-    toggle();
-    setTimeout(() => setStatus(false), 500);
-  };
   return (
     <nav
       className={cn(
-        `relative hidden h-screen flex-none border-r pt-20 md:block`,
-        status && 'duration-500',
+        `relative hidden flex-none border-r pt-20 lg:block h-dvh duration-500`,
         !isMinimized ? 'w-72' : 'w-[72px]',
         className
       )}
     >
       <ChevronLeft
         className={cn(
-          'absolute -right-3 top-20 cursor-pointer rounded-full border bg-background text-3xl text-foreground',
+          'absolute right-0 translate-x-1/2 top-10 cursor-pointer rounded-full border bg-background text-3xl text-foreground size-10 px-2',
           isMinimized && 'rotate-180'
         )}
-        onClick={handleToggle}
+        onClick={toggle}
       />
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
-          <div className="mt-3 space-y-1">
-            <DashboardNav items={navItems} />
-          </div>
-        </div>
-      </div>
+      <DashboardNav items={navItems} />
     </nav>
   );
 }

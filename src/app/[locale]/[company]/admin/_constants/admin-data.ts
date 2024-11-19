@@ -12,7 +12,7 @@ export type User = {
 export const navItems: NavItem[] = [
   {
     title: 'Dashboard',
-    href: '/dashboard',
+    href: '/admin',
     icon: 'dashboard',
     label: 'Dashboard',
   },

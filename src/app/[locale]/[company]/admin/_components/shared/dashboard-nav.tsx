@@ -25,22 +25,22 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
   }
 
   return (
-    <nav
-      className={cn(
-        ' flex flex-col h-full duration-500',
-        !isMinimized ? 'w-fit items-start' : 'w-[76px] items-center'
-      )}
-    >
+    <nav className={cn('flex flex-col items-start h-full whitespace-nowrap')}>
       {items.map((item, index) => {
         const Icon = Icons[item.icon || 'question'];
         return (
           item.href && (
-            <Button asChild key={index} variant="ghost">
+            <div
+              key={index}
+              className={cn(
+                'w-full px-4 py-3 hover:bg-accent rounded cursor-pointer',
+                path.includes(item.href) ? 'bg-accent' : 'transparent'
+              )}
+            >
               <Link
                 href={item.disabled ? '/' : item.href}
                 className={cn(
-                  'flex items-center gap-2 overflow-hidden rounded',
-                  path === item.href ? 'bg-accent' : 'transparent',
+                  'flex items-center gap-2',
                   item.disabled && 'cursor-not-allowed opacity-80'
                 )}
                 onClick={() => {
@@ -53,7 +53,7 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
                   <span className="mr-2 truncate">{item.title}</span>
                 )}
               </Link>
-            </Button>
+            </div>
           )
         );
       })}

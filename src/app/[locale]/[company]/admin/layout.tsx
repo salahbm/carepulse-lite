@@ -18,10 +18,10 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="relative  mx-auto">
+    <main className="relative mx-auto">
       <Suspense
         fallback={
-          <Loader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin" />
+          <Loader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin h-screen" />
         }
       >
         <div className="relative">

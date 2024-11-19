@@ -7,37 +7,23 @@ import UserNav from './user-nav';
 
 export default function Header() {
   return (
-    <>
-      <nav className="flex h-14 items-center justify-between px-4">
-        <div className="hidden lg:block">
-          <Link
-            href="/jobs"
-            className="flex items-center justify-start  flex-row"
+    <nav className="flex h-14 items-center justify-between px-4 border-b">
+      <div className="hidden lg:block">
+        <Link
+          href="/jobs"
+          className="flex items-center justify-start  flex-row"
+        >
+          <p
+            className={cn(
+              'text-sm md:text-lg font-bold whitespace-nowrap -ml-1'
+            )}
           >
-            <Image
-              src="/logos/dark_logo.png"
-              alt="logo"
-              width={50}
-              height={50}
-              className="object-cover"
-            />
-
-            <p
-              className={cn(
-                'text-sm md:text-lg font-bold whitespace-nowrap -ml-1'
-              )}
-            >
-              Admin <span className="textGradient">Booking Uz</span>
-            </p>
-          </Link>
-        </div>
-
-        <MobileSidebar />
-
-        <div className="flex items-center gap-2">
-          <UserNav />
-        </div>
-      </nav>
-    </>
+            Admin <span className="textGradient">Booking Uz</span>
+          </p>
+        </Link>
+      </div>
+      <MobileSidebar />
+      <UserNav />
+    </nav>
   );
 }
