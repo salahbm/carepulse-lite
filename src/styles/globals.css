@@ -6,37 +6,36 @@
 /* ========================================== TAILWIND STYLES */
 @layer base {
   :root {
-    --gradient: #bbd2c5;
+    --gradient: #ff8008;
 
-    --background: 155 13% 6.24%;
-    --foreground: 155 2% 98.9%;
+    --background: 31 65% 4.06%;
+    --foreground: 31 10% 97.6%;
 
-    --muted: 155 10% 23.400000000000002%;
-    --muted-foreground: 155 2% 57.8%;
+    --muted: 31 50% 15.600000000000001%;
+    --muted-foreground: 31 10% 55.2%;
 
-    --popover: 155 61% 10.14%;
-    --popover-foreground: 155 2% 98.9%;
+    --popover: 31 45% 6.76%;
+    --popover-foreground: 31 10% 97.6%;
 
-    --card: 155 61% 10.14%;
-    --card-foreground: 155 2% 98.9%;
+    --card: 31 45% 6.76%;
+    --card-foreground: 31 10% 97.6%;
 
-    --border: 155 10% 23.400000000000002%;
-    --input: 155 10% 23.400000000000002%;
+    --border: 31 50% 15.600000000000001%;
+    --input: 31 50% 15.600000000000001%;
 
-    --primary: 155 20% 78%;
-    --primary-foreground: 155 2% 7.800000000000001%;
+    --primary: 31 100% 52%;
+    --primary-foreground: 31 10% 5.2%;
 
-    --secondary: 155 10% 23.400000000000002%;
-    --secondary-foreground: 155 2% 98.9%;
+    --secondary: 31 50% 15.600000000000001%;
+    --secondary-foreground: 31 10% 97.6%;
 
-    --accent: 155 10% 23.400000000000002%;
-    --accent-foreground: 155 2% 98.9%;
+    --accent: 31 50% 15.600000000000001%;
+    --accent-foreground: 31 10% 97.6%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 155 2% 98.9%;
+    --destructive-foreground: 31 10% 97.6%;
 
-    --ring: 155 20% 78%;
-
+    --ring: 31 100% 52%;
     --white: 0 0% 100%;
     --black: 0 0% 0%;
   }

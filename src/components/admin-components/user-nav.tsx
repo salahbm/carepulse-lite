@@ -10,6 +10,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 import { redirect, useRouter } from 'next/navigation';
 const UserNav = () => {
@@ -25,26 +36,34 @@ const UserNav = () => {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Booking Admin</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              booking@gmail.com
-            </p>
-          </div>
+      <DropdownMenuContent className="w-56 rounded" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal flex flex-col space-y-1">
+          <p className="text-sm font-medium leading-none">Booking Admin</p>
+          <p className="text-xs leading-none text-muted-foreground">
+            booking@gmail.com
+          </p>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            router.refresh();
-            redirect('/sign-in');
-          }}
-        >
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <AlertDialog>
+            <AlertDialogTrigger className="cursor-pointer text-red-400 w-full text-left">
+              Log out
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will log you out, and you
+                  have to sign in again.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
