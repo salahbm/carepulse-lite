@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { MenuIcon } from 'lucide-react';
 import { useState } from 'react';
 import { DashboardNav } from './dashboard-nav';
-import { navItems } from '../../_constants/admin-data';
+import { navItems } from '../../constants/admin-data';
 
 // import { Playlist } from "../data/playlists";
 

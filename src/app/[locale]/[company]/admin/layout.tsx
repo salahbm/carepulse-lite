@@ -1,8 +1,8 @@
 import { Loader } from 'lucide-react';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import Header from './_components/shared/header';
-import Sidebar from './_components/shared/sidebar';
+import Header from '../../../../components/admin-components/header';
+import Sidebar from '../../../../components/admin-components/sidebar';
 
 export const metadata: Metadata = {
   title: 'Admin Booking.uz',

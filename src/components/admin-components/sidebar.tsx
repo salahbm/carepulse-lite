@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
 import { DashboardNav } from './dashboard-nav';
 import { useSidebar } from '@/hook/common/use-sidebar';
-import { navItems } from '../../_constants/admin-data';
+import { navItems } from '../../constants/admin-data';
 
 type SidebarProps = {
   className?: string;
@@ -24,7 +24,7 @@ export default function Sidebar({ className }: SidebarProps) {
     >
       <ChevronLeft
         className={cn(
-          'absolute right-0 translate-x-1/2 top-10 cursor-pointer rounded-full border bg-background text-3xl text-foreground size-10 px-2',
+          'absolute right-0 translate-x-1/2 top-10 cursor-pointer rounded-full border bg-background hover:bg-accent/50 text-3xl text-foreground size-10 px-2',
           isMinimized && 'rotate-180'
         )}
         onClick={toggle}
