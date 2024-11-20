@@ -41,20 +41,6 @@ const Dashboard = async ({ params }: SearchParamProps) => {
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-      <header className="admin-header">
-        <Link href="/" className="cursor-pointer">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={32}
-            width={162}
-            alt="logo"
-            className="h-8 w-fit"
-          />
-        </Link>
-
-        <p className="text-16-semibold">Admin Dashboard</p>
-      </header>
-
       <main className="admin-main">
         <section className="w-full space-y-4">
           <h1 className="header">Welcome 👋</h1>

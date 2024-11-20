@@ -1,9 +1,7 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
-
 import { cn } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
-
 import { useSidebar } from '@/hook/common/use-sidebar';
 import { Icons } from '@/components/shared/icons';
 import { NavItem } from '@/types/admin';
@@ -15,7 +13,6 @@ interface DashboardNavProps {
 
 export function DashboardNav({ items, setOpen }: DashboardNavProps) {
   const path = usePathname();
-  console.log(`path:`, path);
   const route = useRouter();
   const { isMinimized } = useSidebar();
   const getBaseRoute = path.split('/').slice(0, 3).join('/');
@@ -35,7 +32,7 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
               key={index}
               className={cn(
                 'w-full px-4 py-3 hover:bg-accent/35 rounded cursor-pointer flex flex-row items-center justify-start gap-2',
-                (item.href === '/' && getBaseRoute.endsWith('admin')) ||
+                (item.href === '/' && path.endsWith('admin')) ||
                   path.endsWith(item.href)
                   ? 'bg-accent'
                   : 'transparent'
@@ -48,9 +45,7 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
             >
               <Icon className="ml-2 size-5" />
 
-              {!isMinimized && (
-                <span className="mr-2 truncate">{item.title}</span>
-              )}
+              {!isMinimized && <p className="mr-2 truncate">{item.title}</p>}
             </div>
           )
         );
