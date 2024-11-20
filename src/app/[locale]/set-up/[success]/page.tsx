@@ -10,7 +10,7 @@ const RequestSuccess = () => {
 
   return (
     <div className=" flex h-screen max-h-screen px-[5%]">
-      <div className="success-img">
+      <div className="m-auto flex flex-1 flex-col items-center justify-center gap-10 py-10">
         <Link href="/">
           <Image
             src="/assets/icons/logo-full.png"

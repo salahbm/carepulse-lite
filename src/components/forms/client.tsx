@@ -14,6 +14,7 @@ import 'react-phone-number-input/style.css';
 import SubmitButton from '../shared/submit-btn';
 import { createUser } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
+import { companyName } from '@/lib/helpers';
 
 export const ClientForm = ({
   user,
@@ -22,6 +23,7 @@ export const ClientForm = ({
 }) => {
   const router = useRouter();
   const path = usePathname();
+  const company = companyName(path);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
@@ -55,11 +57,14 @@ export const ClientForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
-        <section className="mb-12 space-y-4">
+        <section className="mb-12">
           <h1 className="font-header-1">Hi there 👋</h1>
-          <p className="text-dark-700 font-body-1">
-            Get started with appointments.
+          <p className="text-dark-600 font-body-1 mt-2">
+            Log in or sign up to get started
           </p>
+          <span className="text-dark-700 font-caption-1">
+            You are signing up for {company.toLocaleUpperCase()}
+          </span>
         </section>
 
         <CustomFormField

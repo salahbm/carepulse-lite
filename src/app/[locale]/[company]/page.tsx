@@ -11,15 +11,6 @@ const Home = async ({ params }: SearchParamProps) => {
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="client"
-            className="mb-12 h-10 w-fit"
-            priority
-          />
-
           <ClientForm user={user ? JSON.parse(user) : null} />
 
           <div className="text-14-regular mt-20 flex justify-between">

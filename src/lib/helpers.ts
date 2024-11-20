@@ -1,3 +1,5 @@
+import { usePathname } from 'next/navigation';
+
 export const appointmentType = (type: string) => {
   let status;
   switch (type) {
@@ -29,4 +31,9 @@ export const appointmentButtonLabel = (type: string) => {
       buttonLabel = 'Button is not found';
   }
   return buttonLabel;
+};
+
+export const companyName = (path: string) => {
+  const company = path.split('/').slice(1, 2).join('/');
+  return company;
 };

@@ -11,20 +11,17 @@ const intlMiddleware = createIntlMiddleware({
 });
 
 // Define auth routes and protected pages
-const authRoutes = ['/sign-in', '/sign-up', '/forgot-pwd'];
+const authRoutes = ['/sign-in'];
 // Use regular expressions to match each protected page and its subpaths
-const protectedPages = [
-  /^\/clients\/?/,
-  /^\/clients\/\d+\/?/,
-  /^\/admin\/?/,
-  /^\/admin\/\d+\/?/,
-];
+const protectedPages = [/^\/admin\/?/, /^\/admin\/\d+\/?/];
 
 export async function middleware(request: NextRequest) {
   // Check for authentication cookie
-  const isLoggedIn = request.cookies.has('session-token');
+  const isLoggedIn = request.cookies.has('admin-session-token');
+  console.log(`isLoggedIn:`, isLoggedIn);
 
   const pathname = request.nextUrl.pathname;
+  console.log(`pathname:`, pathname);
 
   // Check if the request is for an auth route
   const isAuthRoute = authRoutes.includes(pathname);

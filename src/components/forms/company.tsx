@@ -82,6 +82,7 @@ const CompanyForm = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong!');
     }
 
     setIsLoading(false);
@@ -140,7 +141,10 @@ const CompanyForm = () => {
                     defaultValue={field.value}
                   >
                     {GenderOptions.map((option, i) => (
-                      <div key={option + i} className="radio-group">
+                      <div
+                        key={option + i}
+                        className="flex h-full flex-1 items-center gap-2 rounded border border-dashed p-3"
+                      >
                         <RadioGroupItem value={option} id={option} />
                         <Label htmlFor={option} className="cursor-pointer">
                           {option}
@@ -233,7 +237,10 @@ const CompanyForm = () => {
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Admin Page Details</h2>
             <p className="text-dark-700">
-              Enter your admin password. PLEASE DO NOT SHARE
+              Admin Password is used to access the admin page.
+              <span className="text-red-500 font-semibold ml-2">
+                Please, do not forget your password!!!
+              </span>
             </p>
           </div>
           <CustomFormField
