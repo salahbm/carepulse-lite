@@ -21,6 +21,7 @@ import { registerCompany } from '@/lib/actions/company.actions';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-phone-number-input/style.css';
 import toast from 'react-hot-toast';
+import { encryptKey } from '@/lib/utils';
 
 const CompanyForm = () => {
   const router = useRouter();
@@ -72,7 +73,7 @@ const CompanyForm = () => {
         address: values.address,
         companyType: values.companyType,
         keywords: values.keywords,
-        adminPwd: values.adminPwd,
+        adminPwd: encryptKey(values.adminPwd),
         logo: values.logo ? formData : undefined,
       };
       const newCompany = await registerCompany(company);

@@ -25,7 +25,6 @@ import 'react-phone-number-input/style.css';
 import SubmitButton from '../shared/submit-btn';
 import toast from 'react-hot-toast';
 import { companyName } from '@/lib/helpers';
-import { revalidatePath } from 'next/cache';
 import Cookies from 'js-cookie';
 import { encryptKey } from '@/lib/utils';
 import { signInCompany } from '@/lib/actions/company.actions';
@@ -34,7 +33,6 @@ export const AdminForm = () => {
   const router = useRouter();
   const path = usePathname();
   const company = companyName(path);
-  console.log(`company:`, company);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof adminSignInValidation>>({
@@ -53,7 +51,7 @@ export const AdminForm = () => {
         const encryptedKey = encryptKey(response);
         Cookies.set(`${company}_auth_token`, encryptedKey);
         toast.success('Welcome to Admin!');
-        router.push(`${company}/admin`);
+        router.refresh();
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong!');

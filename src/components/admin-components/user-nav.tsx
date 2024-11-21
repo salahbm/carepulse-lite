@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -22,9 +21,20 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-import { redirect, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { companyName } from '@/lib/helpers';
 const UserNav = () => {
   const router = useRouter();
+  const path = usePathname();
+  const company = companyName(path);
+
+  const handleLogout = async () => {
+    // Remove token from cookie
+    Cookies.remove(`${company}_auth_token`);
+    // Redirect to login page
+    router.push(`/${company}`);
+  };
 
   return (
     <DropdownMenu>
@@ -60,7 +70,9 @@ const UserNav = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={handleLogout}>
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

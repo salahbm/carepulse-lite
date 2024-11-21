@@ -10,7 +10,7 @@ import {
   PROJECT_ID,
   storage,
 } from '../appwrite.config';
-import { parseStringify } from '../utils';
+import { decryptKey, encryptKey, parseStringify } from '../utils';
 
 // GET SEARCHED COMPANY
 export const searchCompany = async (name: string) => {
@@ -97,10 +97,16 @@ export const registerCompany = async ({
 export const signInCompany = async (company: string, pwd: string) => {
   try {
     const companyData = await getCompany(company);
-    if (companyData.adminPwd === pwd) {
+    console.log(encryptKey(pwd));
+
+    const adminPwd = decryptKey(companyData.adminPwd);
+    if (adminPwd === pwd) {
       return parseStringify(companyData);
+    } else {
+      throw new Error('Invalid credentials', { cause: 'Invalid credentials' });
     }
   } catch (error) {
     console.error('An error occurred while signing in the company:', error);
+    throw error;
   }
 };
