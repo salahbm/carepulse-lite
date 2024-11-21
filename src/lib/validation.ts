@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { validateCode } from './helpers';
 
 export const searchValidation = z.object({
   search: z
@@ -97,4 +98,14 @@ export const CompanyFormValidation = z.object({
   logo: z.custom<File[]>().optional(),
   adminPwd: z.string().min(6, 'Password must be at least 6 characters'),
   privacyConsent: z.boolean().default(false),
+});
+
+export const adminSignInValidation = z.object({
+  pwd: z
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .refine(
+      (pwd) => validateCode(pwd),
+      'Invalid code, Please enter only 6 numbers'
+    ),
 });

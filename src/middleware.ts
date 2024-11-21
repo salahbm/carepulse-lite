@@ -11,32 +11,44 @@ const intlMiddleware = createIntlMiddleware({
 });
 
 // Define auth routes and protected pages
-const authRoutes = ['/sign-in'];
+const authRoutes = '/sign-in';
 // Use regular expressions to match each protected page and its subpaths
-const protectedPages = [/^\/admin\/?/, /^\/admin\/\d+\/?/];
+const protectedPages = [
+  '/admin/date-time',
+  `/admin/statistics`,
+  `/admin/settings`,
+  '/admin',
+];
 
 export async function middleware(request: NextRequest) {
   // Check for authentication cookie
-  const isLoggedIn = request.cookies.has('admin-session-token');
-  console.log(`isLoggedIn:`, isLoggedIn);
 
   const pathname = request.nextUrl.pathname;
-  console.log(`pathname:`, pathname);
+
+  const dynamicPath = pathname.split('/')[1];
+
+  const isLoggedIn = request.cookies.has(`${dynamicPath}_auth_token`);
 
   // Check if the request is for an auth route
-  const isAuthRoute = authRoutes.includes(pathname);
+  const isAuthRoute = pathname.includes(authRoutes);
 
   // Redirect authenticated user away from auth routes
   if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL(`/${dynamicPath}/admin`, request.url));
   }
 
   // Redirect unauthenticated user trying to access protected routes
   const isProtectedPage = protectedPages.some((pattern) =>
-    pattern.test(pathname)
+    pathname.match(pattern)
   );
   if (!isLoggedIn && isProtectedPage) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+    // Avoid loop by ensuring the pathname does not already end with /sign-in
+    if (!pathname.endsWith('/sign-in')) {
+      const basePath = dynamicPath; // Extract the first dynamic segment (e.g., 'salahLLC')
+      return NextResponse.redirect(
+        new URL(`/${basePath}/sign-in`, request.url)
+      );
+    }
   }
 
   // Apply locale middleware, excluding specific paths

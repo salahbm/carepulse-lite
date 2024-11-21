@@ -37,3 +37,9 @@ export const companyName = (path: string) => {
   const company = path.split('/').slice(1, 2).join('/');
   return company;
 };
+
+// Validate 6 digit code
+export const validateCode = (code: string) => {
+  const regex = /^[0-9]{6}$/;
+  return regex.test(code);
+};

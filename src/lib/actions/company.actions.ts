@@ -92,3 +92,15 @@ export const registerCompany = async ({
     console.log('An error occurred while creating a new company:', error);
   }
 };
+
+// SIGN IN THE COMPANY WITH COMPARING THE PASSWORD
+export const signInCompany = async (company: string, pwd: string) => {
+  try {
+    const companyData = await getCompany(company);
+    if (companyData.adminPwd === pwd) {
+      return parseStringify(companyData);
+    }
+  } catch (error) {
+    console.error('An error occurred while signing in the company:', error);
+  }
+};

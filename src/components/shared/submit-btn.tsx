@@ -18,7 +18,7 @@ const SubmitButton = ({
     <Button
       type="submit"
       disabled={isLoading || disabled}
-      className={className ?? 'w-full'}
+      className={className ?? 'w-full h-11'}
     >
       {isLoading ? (
         <div className="flex items-center gap-4 text-white">
