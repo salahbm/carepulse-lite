@@ -97,7 +97,6 @@ export const registerCompany = async ({
 export const signInCompany = async (company: string, pwd: string) => {
   try {
     const companyData = await getCompany(company);
-    console.log(encryptKey(pwd));
 
     const adminPwd = decryptKey(companyData.adminPwd);
     if (adminPwd === pwd) {

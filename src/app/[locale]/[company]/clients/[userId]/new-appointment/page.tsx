@@ -5,10 +5,14 @@ import { AppointmentForm } from '@/components/forms/appointment';
 import { getCompany } from '@/lib/actions/company.actions';
 import { redirect } from 'next/navigation';
 
-const Appointment = async ({ params }: SearchParamProps) => {
-  const { userId, company: companyName } = await params;
+const Appointment = async ({
+  params,
+}: {
+  params: Promise<{ userId: string; company: string }>;
+}) => {
+  const resolvedParams = await params; // Await if params is a promise
+  const { userId, company: companyName } = resolvedParams;
   const client = await getClient(userId);
-  console.log(`client:`, client);
   const company = await getCompany(companyName);
   if (!client) redirect(`/${company}/clients/${userId}/register`);
   if (!company) redirect(`/${company}`);

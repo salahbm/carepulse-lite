@@ -1,5 +1,5 @@
 import { useLocale } from 'next-intl';
-import { cookies } from 'next/headers';
+import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { locales } from '../../../i18n.config';
@@ -19,7 +19,7 @@ const useTranslation = () => {
       if (newLocale === currentLocale) return;
 
       // Update the locale in cookies
-      cookies().set('NEXT_LOCALE', newLocale, { expires: 365 });
+      Cookies.set('NEXT_LOCALE', newLocale, { expires: 365 });
 
       // Since there's no locale prefix in the URL, just trigger a re-render
       router.push(currentPathname, undefined);

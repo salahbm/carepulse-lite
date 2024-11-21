@@ -4,13 +4,10 @@ import { redirect } from 'next/navigation';
 import { getClient, getUser } from '@/lib/actions/clients.actions';
 import RegisterForm from '@/components/forms/register';
 
-const Register = async ({ params }: SearchParamProps) => {
+const Register = async ({ params }: any) => {
   const { userId, company } = await params;
-  console.log(`company:`, company);
-  console.log(`userId:`, userId);
   if (!company || !userId) redirect('/');
   const user = await getUser(userId);
-  console.log(`user:`, user);
   const client = await getClient(userId);
 
   if (client) redirect(`/${company}/clients/${userId}/new-appointment`);

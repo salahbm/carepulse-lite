@@ -23,6 +23,10 @@ export interface TCompany extends Models.Document {
   ownerPhone?: string;
   adminPwd: string;
   client?: TClient[];
+  // Schedule
+  courseDuration?: number;
+  dayOffDates?: string[];
+  timeOffDates?: string[];
 }
 
 export interface Appointment extends Models.Document {

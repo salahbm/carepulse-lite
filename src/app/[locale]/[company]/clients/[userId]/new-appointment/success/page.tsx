@@ -4,18 +4,16 @@ import { getAppointment } from '@/lib/actions/appointment.actions';
 import { formatDateTime } from '@/lib/utils';
 import { getCompany } from '@/lib/actions/company.actions';
 import Link from 'next/link';
+import { FC } from 'react';
 
-const SuccessAppointment = async ({
-  searchParams,
-  params,
-}: SearchParamProps) => {
+const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
   const { userId, company: companyName } = params;
-  const { appointmentId } = searchParams;
-  if (!userId || !companyName || !appointmentId) {
+  const id = searchParams.appointmentId;
+  if (!userId || !companyName || !id) {
     console.error('Missing required parameters');
     return <p>Error: Missing required parameters</p>;
   }
-  const appointment = await getAppointment(appointmentId as string);
+  const appointment = await getAppointment(id as string);
   const company = await getCompany(companyName);
 
   return (

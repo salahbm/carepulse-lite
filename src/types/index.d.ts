@@ -1,9 +1,14 @@
 /* eslint-disable no-unused-vars */
 
+// Correcting SearchParamProps to align with Next.js expectations
 declare type SearchParamProps = {
-  params: { [key: string]: string };
+  params: { [key: string]: string }; // params is just an object, not a Promise
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
+declare type Params = Promise<{
+  params: { [key: string]: string };
+}>;
 
 declare type Gender = 'Male' | 'Female';
 declare type Status = 'pending' | 'scheduled' | 'cancelled';

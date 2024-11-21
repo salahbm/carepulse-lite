@@ -6,7 +6,11 @@ import { DataTable } from '@/components/table/DataTable';
 import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
 import { StatCard } from '@/components/shared/stats-card';
 
-const Dashboard = async ({ params }: SearchParamProps) => {
+const Dashboard = async ({
+  params,
+}: {
+  params: Promise<{ company: string }>;
+}) => {
   const { company } = await params;
   const appointments = await getRecentAppointmentList(company);
 

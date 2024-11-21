@@ -3,8 +3,8 @@ import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Home = async ({ params }: SearchParamProps) => {
-  const { company } = await params;
+const Home = async ({ params }: any) => {
+  const { company } = params;
   const cookie = await cookies();
   const user = cookie.get('user')?.value;
   return (
