@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Header from '../../../../components/admin-components/header';
 import Sidebar from '../../../../components/admin-components/sidebar';
+import Loading from './loading';
 
 export const metadata: Metadata = {
   title: 'Admin Booking.uz',
@@ -19,11 +20,7 @@ export default function AdminLayout({
 }>) {
   return (
     <main className="relative mx-auto h-screen">
-      <Suspense
-        fallback={
-          <Loader className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin" />
-        }
-      >
+      <Suspense fallback={<Loading />}>
         <div className="relative">
           <Header />
           <div className="flex overflow-hidden">

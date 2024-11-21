@@ -22,13 +22,7 @@ const SuccessAppointment = async ({
     <div className=" flex h-screen max-h-screen px-[5%] py-10">
       <div className="flex flex-1 flex-col justify-center items-center">
         <Link href="/">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="logo"
-            className="h-10 w-fit"
-          />
+          <h1 className="font-title text-green-500">Go Back</h1>
         </Link>
 
         <section className="flex flex-col items-center my-6">
@@ -47,24 +41,29 @@ const SuccessAppointment = async ({
 
         <section className=" flex w-full flex-col items-center gap-8 border-y-2  py-8 md:w-fit md:flex-row">
           <p>Requested appointment details: </p>
-          <div className="flex items-center gap-3">
-            <Image
-              src={company?.logoUrl || '/assets/icons/logo-icon.png'}
-              alt="company"
-              width={100}
-              height={100}
-              className="size-6"
-            />
-            <p className="whitespace-nowrap"> {company?.name}</p>
-          </div>
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/calendar.svg"
-              height={24}
-              width={24}
-              alt="calendar"
-            />
-            <p> {formatDateTime(appointment.schedule).dateTime}</p>
+          <div className="flex-row justify-between items-center flex gap-8 flex-wrap">
+            <div className="flex items-center gap-3">
+              <Image
+                src={company?.logoUrl || '/assets/icons/logo-icon.png'}
+                alt="company"
+                width={100}
+                height={100}
+                className="size-6"
+              />
+              <p className="whitespace-nowrap">
+                {' '}
+                {company?.name.toUpperCase()}
+              </p>
+            </div>
+            <div className="flex gap-2 ">
+              <Image
+                src="/assets/icons/calendar.svg"
+                height={24}
+                width={24}
+                alt="calendar"
+              />
+              <p> {formatDateTime(appointment.schedule).dateTime}</p>
+            </div>
           </div>
         </section>
 

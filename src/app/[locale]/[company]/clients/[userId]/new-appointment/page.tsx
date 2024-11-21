@@ -28,7 +28,6 @@ const Appointment = async ({ params }: SearchParamProps) => {
           <AppointmentForm
             userId={userId}
             clientId={client?.$id}
-            clientName={client?.name}
             company={company}
             type="create"
           />

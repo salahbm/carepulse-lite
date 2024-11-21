@@ -5,6 +5,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { useSidebar } from '@/hook/common/use-sidebar';
 import { Icons } from '@/components/shared/icons';
 import { NavItem } from '@/types/admin';
+import Link from 'next/link';
+import { LogIn } from 'lucide-react';
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -50,6 +52,17 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
           )
         );
       })}
+      <div className="mt-auto w-full pb-6">
+        <Link
+          href="/"
+          className={cn(
+            'w-full px-4 py-3 hover:bg-accent/35 rounded cursor-pointer flex flex-row items-center justify-start gap-2'
+          )}
+        >
+          <LogIn className="ml-2 size-5" />
+          Go Back Home
+        </Link>
+      </div>
     </nav>
   );
 }

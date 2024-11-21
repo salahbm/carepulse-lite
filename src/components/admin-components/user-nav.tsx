@@ -24,10 +24,14 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { companyName } from '@/lib/helpers';
+import { getCompany } from '@/lib/actions/company.actions';
+import { use, useEffect, useState } from 'react';
+import { TCompany } from '@/types/appwrite.types';
 const UserNav = () => {
   const router = useRouter();
   const path = usePathname();
   const company = companyName(path);
+  const [data, setData] = useState<TCompany>();
 
   const handleLogout = async () => {
     // Remove token from cookie
@@ -36,21 +40,35 @@ const UserNav = () => {
     router.push(`/${company}`);
   };
 
+  const fetchCompany = async () => {
+    try {
+      const response = await getCompany(company);
+      setData(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchCompany();
+  }, [company]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={'U'} alt={''} />
-            <AvatarFallback>BU</AvatarFallback>
+            <AvatarImage src={data?.logoUrl} alt={data?.name || 'LOGO'} />
+            <AvatarFallback>X</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 rounded" align="end" forceMount>
         <DropdownMenuLabel className="font-normal flex flex-col space-y-1">
-          <p className="text-sm font-medium leading-none">Booking Admin</p>
+          <p className="text-sm font-medium leading-none">
+            {data?.name.toLocaleUpperCase() || 'Company'} Admin
+          </p>
           <p className="text-xs leading-none text-muted-foreground">
-            booking@gmail.com
+            {data?.phone}
           </p>
         </DropdownMenuLabel>
 
