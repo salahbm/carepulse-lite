@@ -1,20 +1,24 @@
 'use client';
 import { ChevronUp } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 
 const FloatingButton = () => {
-  const isBrowser = () => typeof window !== 'undefined';
+  const [isBrowser, setIsBrowser] = useState(false);
 
-  if (!isBrowser()) {
-    return null;
-  }
+  useEffect(() => {
+    setIsBrowser(typeof window !== 'undefined');
+  }, []);
 
   const handleClickTopButton = () => {
-    if (isBrowser()) {
+    if (isBrowser) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  if (!isBrowser) {
+    return null;
+  }
 
   return (
     <Button

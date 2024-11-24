@@ -12,10 +12,9 @@ const Register = async ({ params }: any) => {
 
   return (
     <div className="flex h-screen max-h-screen">
-      <section className="remove-scrollbar container">
-        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
+      <section className="remove-scrollbar container justify-start">
+        <div className="sub-container max-w-[860px] py-10">
           <Logo />
-
           <RegisterForm user={user} company={company} />
 
           <p className="py-12">© 2024 EasyBooking</p>

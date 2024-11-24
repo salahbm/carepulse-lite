@@ -52,7 +52,8 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
           )
         );
       })}
-      <div className="mt-auto w-full pb-6">
+      <div className="h-1 bg-accent/40 w-full my-6" />
+      <div className="w-full">
         <Link
           href="/"
           className={cn(
