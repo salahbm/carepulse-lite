@@ -98,5 +98,8 @@ export const registerClient = async ({ ...client }: RegisterUserParams) => {
     return parseStringify(newClient);
   } catch (error) {
     console.log('An error occurred while creating a new client:', error);
+    throw new Error('An error occurred while creating a new client', {
+      cause: error,
+    });
   }
 };

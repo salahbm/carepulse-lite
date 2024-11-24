@@ -14,7 +14,7 @@ const Home = () => {
 
           <div className="font-body-1 mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
-              © 2024 Booking uz
+              © 2024 EasyBooking
             </p>
             <Link href="/set-up" className="text-green-500">
               Create new company

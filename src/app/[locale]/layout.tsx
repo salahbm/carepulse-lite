@@ -8,6 +8,9 @@ import { ThemeProvider } from 'next-themes';
 import RootProvider from '@/providers/root';
 import { setRequestLocale } from 'next-intl/server';
 import Head from 'next/head';
+import { Button } from '@/components/ui/button';
+import { ChevronUp } from 'lucide-react';
+import FloatingButton from '@/components/shared/floating-btn';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -16,7 +19,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Booking.uz',
+  title: 'EasyBooking',
   description:
     'A healthcare client management System designed to streamline client registration, appointment scheduling, and medical records management for healthcare providers.',
   icons: {
@@ -54,6 +57,7 @@ export default async function IndexLayout({
         <ThemeProvider attribute="class" defaultTheme="dark">
           <RootProvider>{children}</RootProvider>
         </ThemeProvider>
+        <FloatingButton />
       </body>
     </html>
   );

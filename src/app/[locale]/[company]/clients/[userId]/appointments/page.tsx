@@ -9,7 +9,7 @@ const Appointment = async () => {
         <div className="sub-container max-w-[860px] flex-1 justify-between">
           <Logo />
 
-          <p className="mt-10 py-12">© 2024 Booking uz</p>
+          <p className="mt-10 py-12">© 2024 EasyBooking</p>
         </div>
       </section>
 

@@ -18,7 +18,7 @@ const Register = async ({ params }: any) => {
 
           <RegisterForm user={user} company={company} />
 
-          <p className="py-12">© 2024 Booking uz</p>
+          <p className="py-12">© 2024 EasyBooking</p>
         </div>
       </section>
 

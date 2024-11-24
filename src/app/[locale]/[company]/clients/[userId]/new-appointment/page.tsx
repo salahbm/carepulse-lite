@@ -29,7 +29,7 @@ const Appointment = async ({
             type="create"
           />
 
-          <p className="mt-10 py-12">© 2024 Booking uz</p>
+          <p className="mt-10 py-12">© 2024 EasyBooking</p>
         </div>
       </section>
 

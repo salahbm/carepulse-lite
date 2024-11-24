@@ -1,13 +1,13 @@
-import { Loader } from 'lucide-react';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Header from '../../../../components/admin-components/header';
 import Sidebar from '../../../../components/admin-components/sidebar';
 import Loading from './loading';
+import FloatingButton from '@/components/shared/floating-btn';
 
 export const metadata: Metadata = {
-  title: 'Admin Booking.uz',
-  description: 'Admin Panel for Booking.uz.',
+  title: 'Admin EasyBooking',
+  description: 'Admin Panel for EasyBooking.',
   icons: {
     icon: '/assets/logos/logo.png',
   },
@@ -19,7 +19,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="relative mx-auto h-screen">
+    <main className="relative mx-auto min-h-screen">
       <Suspense fallback={<Loading />}>
         <div className="relative">
           <Header />
@@ -31,6 +31,7 @@ export default function AdminLayout({
           </div>
         </div>
       </Suspense>
+      <FloatingButton />
     </main>
   );
 }

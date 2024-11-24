@@ -17,7 +17,7 @@ const Home = async ({ params }: any) => {
 
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
-              © 2024 Booking uz
+              © 2024 EasyBooking
             </p>
             <Link href={`/${company}/admin`} className="text-green-500">
               Admin

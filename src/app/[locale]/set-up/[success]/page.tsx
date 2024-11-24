@@ -32,7 +32,7 @@ const RequestSuccess = () => {
           <Link href={`/${pathname?.split('/')[2]}`}>Home</Link>
         </Button>
 
-        <p className="copyright">© 2024 Booking uz</p>
+        <p className="copyright">© 2024 EasyBooking</p>
       </div>
     </div>
   );
