@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { getClient } from '@/lib/actions/clients.actions';
 import { AppointmentForm } from '@/components/forms/appointment';
 import { getCompany } from '@/lib/actions/company.actions';
+import Logo from '@/components/shared/logo';
 
 const Appointment = async ({
   params,
@@ -18,14 +19,7 @@ const Appointment = async ({
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[860px] flex-1 justify-between">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="logo"
-            className="mb-12 h-10 w-fit"
-          />
-
+          <Logo />
           <AppointmentForm
             userId={userId}
             clientId={client?.$id}

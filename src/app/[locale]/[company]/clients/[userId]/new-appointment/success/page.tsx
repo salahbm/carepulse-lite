@@ -42,7 +42,7 @@ const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
           <div className="flex-row justify-between items-center flex gap-8 flex-wrap">
             <div className="flex items-center gap-3">
               <Image
-                src={company?.logoUrl || '/assets/icons/logo-icon.png'}
+                src={company?.logoUrl || '/assets/logos/logo.png'}
                 alt="company"
                 width={100}
                 height={100}

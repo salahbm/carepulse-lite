@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Admin Booking.uz',
   description: 'Admin Panel for Booking.uz.',
   icons: {
-    icon: '/assets/icons/logo-icon.png',
+    icon: '/assets/logos/logo.png',
   },
 };
 

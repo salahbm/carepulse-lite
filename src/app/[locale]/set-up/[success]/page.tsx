@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
+import Logo from '@/components/shared/logo';
 
 const RequestSuccess = () => {
   const pathname = usePathname();
@@ -11,15 +12,7 @@ const RequestSuccess = () => {
   return (
     <div className=" flex h-screen max-h-screen px-[5%]">
       <div className="m-auto flex flex-1 flex-col items-center justify-center gap-10 py-10">
-        <Link href="/">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="logo"
-            className="h-10 w-fit"
-          />
-        </Link>
+        <Logo />
 
         <section className="flex flex-col items-center">
           <Image

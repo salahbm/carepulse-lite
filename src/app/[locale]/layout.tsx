@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description:
     'A healthcare client management System designed to streamline client registration, appointment scheduling, and medical records management for healthcare providers.',
   icons: {
-    icon: '/assets/icons/logo-icon.png',
+    icon: '/assets/logos/logo.png',
   },
 };
 
@@ -47,7 +47,7 @@ export default async function IndexLayout({
       </Head>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased overflow-x-hidden',
           fontSans.variable
         )}
       >

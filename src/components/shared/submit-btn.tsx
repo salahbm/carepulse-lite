@@ -18,6 +18,7 @@ const SubmitButton = ({
   return (
     <Button
       type="submit"
+      variant="secondary"
       disabled={isLoading || disabled}
       className={cn(className ?? 'w-full', 'h-11')}
     >

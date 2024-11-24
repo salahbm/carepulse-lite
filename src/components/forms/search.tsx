@@ -78,7 +78,7 @@ export const SearchForm = () => {
                 >
                   <div className="inline-flex items-center justify-between gap-2">
                     <Image
-                      src={company.logoUrl || '/assets/icons/logo-icon.png'}
+                      src={company.logoUrl || '/assets/logos/logo.png'}
                       alt="company logo"
                       width={50}
                       height={50}

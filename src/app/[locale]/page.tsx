@@ -1,4 +1,5 @@
 import { SearchForm } from '@/components/forms/search';
+import Logo from '@/components/shared/logo';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,14 +8,7 @@ const Home = () => {
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="client"
-            className="mb-12 h-10 w-fit"
-            priority
-          />
+          <Logo />
 
           <SearchForm />
 

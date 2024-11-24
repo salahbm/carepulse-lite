@@ -5,12 +5,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
 import { getAppointmentSchema } from '@/lib/validation';
 import { Appointment, TCompany } from '@/types/appwrite.types';
-
 import 'react-datepicker/dist/react-datepicker.css';
-
 import { Form } from '../ui/form';
 import CustomFormField, { FormFieldType } from '../shared/form-field';
 import SubmitButton from '../shared/submit-btn';
@@ -124,29 +121,34 @@ export const AppointmentForm = ({
             </p>
           </section>
         )}
-        <Button
-          type="button"
-          className="w-full h-11"
-          variant="link"
-          onClick={() => router.push(`${allAppointmentsUrl}/appointments`)}
-        >
-          <BookOpenText /> View All Appointments
-        </Button>
+
         {type !== 'cancel' && (
           <>
-            <p>You are scheduling an appointment for {company.name}</p>
-            <div className="inline-flex items-center justify-between gap-4">
-              <Image
-                src={company.logoUrl || '/assets/icons/logo-icon.png'}
-                alt="company logo"
-                width={50}
-                height={50}
-                className="rounded-full object-contain h-10 w-10"
-              />
-              <div>
-                <p className="text-lg font-semibold">{company.name}</p>
-                <p className="text-mg font-medium">{company.address}</p>
+            <div className="inline-flex items-center justify-between gap-4 w-full bg-accent/15 p-4 rounded">
+              <div className="inline-flex items-center justify-between gap-4">
+                <Image
+                  src={company.logoUrl || '/assets/logos/logo.png'}
+                  alt="company logo"
+                  width={50}
+                  height={50}
+                  className="rounded-full object-contain h-10 w-10"
+                />
+                <div>
+                  <p className="text-lg font-semibold">{company.name}</p>
+                  <p className="text-mg font-medium">{company.address}</p>
+                </div>
               </div>
+              <Button
+                type="button"
+                className="h-11"
+                variant="link"
+                onClick={() =>
+                  router.push(`${allAppointmentsUrl}/appointments`)
+                }
+              >
+                View All Appointments
+                <BookOpenText />
+              </Button>
             </div>
 
             <CustomFormField

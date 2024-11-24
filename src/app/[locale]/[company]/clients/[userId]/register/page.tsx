@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { getUser } from '@/lib/actions/clients.actions';
 import RegisterForm from '@/components/forms/register';
+import Logo from '@/components/shared/logo';
 
 const Register = async ({ params }: any) => {
   const { userId, company } = await params;
@@ -13,13 +14,7 @@ const Register = async ({ params }: any) => {
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">
         <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
-          <Image
-            src="/assets/icons/logo-full.png"
-            height={1000}
-            width={1000}
-            alt="client"
-            className="mb-12 h-10 w-fit"
-          />
+          <Logo />
 
           <RegisterForm user={user} company={company} />
 
