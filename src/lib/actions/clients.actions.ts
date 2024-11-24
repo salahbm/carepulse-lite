@@ -8,6 +8,7 @@ import {
   users,
 } from '../appwrite.config';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 // CREATE USER
 export const createUser = async (user: CreateUserParams) => {
@@ -76,11 +77,8 @@ export const getClient = async (userId: string) => {
 
     return parseStringify(clients.documents[0]);
   } catch (error: any) {
-    console.error(
-      'An error occurred while retrieving the client details:',
-      error.message || error
-    );
-    throw error;
+    console.error('An error occurred:', error.message || error);
+    return NextResponse.error(); // Returns a 500 error response
   }
 };
 
