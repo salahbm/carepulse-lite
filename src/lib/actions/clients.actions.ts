@@ -71,7 +71,7 @@ export const getClient = async (userId: string) => {
 
     if (!clients.documents || clients.documents.length === 0) {
       console.warn(`No client found for userId: ${userId}`);
-      return null; // Return null if the client does not exist
+      throw new Error(`No client found for userId: ${userId}`);
     }
 
     return parseStringify(clients.documents[0]);
@@ -80,7 +80,7 @@ export const getClient = async (userId: string) => {
       'An error occurred while retrieving the client details:',
       error.message || error
     );
-    return null; // Return null on error to avoid breaking the frontend
+    throw error;
   }
 };
 

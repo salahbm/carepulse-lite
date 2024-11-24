@@ -1,17 +1,17 @@
 'use server';
-
 import { revalidatePath } from 'next/cache';
 import { ID, Query } from 'node-appwrite';
 import { Appointment } from '@/types/appwrite.types';
+import axios from 'axios';
 
 import {
   APPOINTMENT_COLLECTION_ID,
-  COMPANY_COLLECTION_ID,
   DATABASE_ID,
   databases,
   messaging,
 } from '../appwrite.config';
 import { formatDateTime, parseStringify } from '../utils';
+import { BASE_URL } from '@/constants/base_url';
 
 //  CREATE APPOINTMENT
 export const createAppointment = async (
@@ -25,10 +25,24 @@ export const createAppointment = async (
       appointment
     );
 
+    // const response = await axios.post(
+    //   `${BASE_URL}/api/telegram/new-appointment`,
+    //   {
+    //     message: `Hi ${appointment.company}, I received your request!`,
+    //     userId: appointment.userId, // Make sure to pass the correct userId here
+    //   }
+    // );
+
+    // console.log(`response:`, response);
+    // if (response.status !== 200) {
+    //   throw new Error('Failed to send message');
+    // }
+
     revalidatePath('/admin');
     return parseStringify(newAppointment);
   } catch (error) {
-    console.error('An error occurred while creating a new appointment:', error);
+    console.error('Error in createAppointment:', error);
+    throw error;
   }
 };
 

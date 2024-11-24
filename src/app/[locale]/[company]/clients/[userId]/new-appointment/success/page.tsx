@@ -6,9 +6,14 @@ import { getCompany } from '@/lib/actions/company.actions';
 import Link from 'next/link';
 import { FC } from 'react';
 import Logo from '@/components/shared/logo';
-import { Clock } from 'lucide-react';
+import { BookOpenText, Clock } from 'lucide-react';
+import { firstLetterUppercase } from '@/lib/helpers';
+interface Props {
+  searchParams: { [key: string]: string };
+  params: { [key: string]: string };
+}
 
-const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
+const SuccessAppointment: FC<Props> = async ({ searchParams, params }) => {
   const { userId, company: companyName } = await params;
   const { appointmentId } = await searchParams;
   if (!userId || !companyName || !appointmentId) {
@@ -47,7 +52,9 @@ const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
               height={100}
               className="size-6"
             />
-            <p className="whitespace-nowrap"> {company?.name.toUpperCase()}</p>
+            <p className="whitespace-nowrap">
+              {firstLetterUppercase(company?.name)}
+            </p>
           </div>
           <div className="flex gap-2 ">
             <Image
@@ -60,13 +67,20 @@ const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
           </div>
         </div>
       </section>
-
-      <Button variant="outline" className="mt-6 max-w-fit mx-auto h-11" asChild>
-        <Link href={`/${company.name}/clients/${userId}/new-appointment`}>
-          <Clock />
-          New Appointment
-        </Link>
-      </Button>
+      <div className="mt-6 inline-flex justify-between items-center">
+        <Button variant="default" className="h-11" asChild>
+          <Link href={`/${company.name}/clients/${userId}/new-appointment`}>
+            <Clock />
+            New Appointment
+          </Link>
+        </Button>
+        <Button variant="outline" className="h-11" asChild>
+          <Link href={`/${company.name}/clients/${userId}/appointments`}>
+            <BookOpenText />
+            All Appointments
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 };

@@ -79,10 +79,9 @@ export const AppointmentForm = ({
         };
 
         const newAppointment = await createAppointment(appointment);
+
         if (newAppointment) {
           form.reset();
-          const fullUrl = `${window.location.origin}${path}/success?appointmentId=${newAppointment.$id}`;
-          router.push(fullUrl);
           toast.success('Appointment created successfully!');
         }
       } else {
@@ -124,32 +123,28 @@ export const AppointmentForm = ({
 
         {type !== 'cancel' && (
           <>
-            <div className="inline-flex items-center justify-between gap-4 w-full bg-accent/15 p-4 rounded">
-              <div className="inline-flex items-center justify-between gap-4">
-                <Image
-                  src={company.logoUrl || '/assets/logos/logo.png'}
-                  alt="company logo"
-                  width={50}
-                  height={50}
-                  className="rounded-full object-contain h-10 w-10"
-                />
-                <div>
-                  <p className="text-lg font-semibold">{company.name}</p>
-                  <p className="text-mg font-medium">{company.address}</p>
-                </div>
+            <div className="inline-flex items-center justify-between gap-4">
+              <Image
+                src={company.logoUrl || '/assets/logos/logo.png'}
+                alt="company logo"
+                width={50}
+                height={50}
+                className="rounded-full object-contain h-10 w-10"
+              />
+              <div>
+                <p className="text-lg font-semibold">{company.name}</p>
+                <p className="text-mg font-medium">{company.address}</p>
               </div>
-              <Button
-                type="button"
-                className="h-11"
-                variant="link"
-                onClick={() =>
-                  router.push(`${allAppointmentsUrl}/appointments`)
-                }
-              >
-                View All Appointments
-                <BookOpenText />
-              </Button>
             </div>
+            <Button
+              type="button"
+              className="h-11 w-full"
+              variant="link"
+              onClick={() => router.push(`${allAppointmentsUrl}/appointments`)}
+            >
+              View All Appointments
+              <BookOpenText />
+            </Button>
 
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}

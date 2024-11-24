@@ -10,8 +10,10 @@ const Appointment = async ({
 }: {
   params: Promise<{ userId: string; company: string }>;
 }) => {
-  const resolvedParams = await params;
-  const { userId, company: companyName } = resolvedParams;
+  const { userId, company: companyName } = await params;
+  console.log('====================================');
+  console.log('CLIENT IS BEING FETCHED');
+  console.log('====================================');
   const client = await getClient(userId);
   const company = await getCompany(companyName);
 
