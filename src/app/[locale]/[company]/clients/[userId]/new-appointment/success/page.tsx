@@ -13,7 +13,7 @@ interface Props {
   params: { [key: string]: string };
 }
 
-const SuccessAppointment: FC<Props> = async ({ searchParams, params }) => {
+const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
   const { userId, company: companyName } = await params;
   const { appointmentId } = await searchParams;
   if (!userId || !companyName || !appointmentId) {
