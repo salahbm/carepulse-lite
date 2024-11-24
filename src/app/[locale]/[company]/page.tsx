@@ -1,16 +1,18 @@
 import { ClientForm } from '@/components/forms/client';
+import Logo from '@/components/shared/logo';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Home = async ({ params }: any) => {
-  const { company } = params;
+  const { company } = await params;
   const cookie = await cookies();
   const user = cookie.get('user')?.value;
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
+          <Logo />
           <ClientForm user={user ? JSON.parse(user) : null} />
 
           <div className="text-14-regular mt-20 flex justify-between">

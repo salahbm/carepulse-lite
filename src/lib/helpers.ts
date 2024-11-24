@@ -43,3 +43,7 @@ export const validateCode = (code: string) => {
   const regex = /^[0-9]{6}$/;
   return regex.test(code);
 };
+
+export const firstLetterUppercase = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

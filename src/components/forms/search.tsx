@@ -52,7 +52,7 @@ export const SearchForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
-        <section className="mb-12 space-y-4">
+        <section className="my-12 space-y-4">
           <h1 className="font-header-1">Hi there 👋</h1>
           <p className="text-dark-700 font-body-1">
             Get started with appointments.
@@ -67,16 +67,16 @@ export const SearchForm = () => {
           iconSrc="/assets/icons/search.svg"
           iconAlt="search"
         />
-        <div className="w-full max-h-[350px] overflow-y-auto    px-2">
+        <div className="w-full max-h-[350px] rounded overflow-x-hidden overflow-y-auto bg-accent/10 ">
           {companyList.length > 0 && (
-            <div className="gap-2 flex flex-col">
+            <ul className="gap-2 flex flex-col [&>li:last-child]:border-none [&>li]:border-b p-4">
               {companyList.map((company) => (
                 <Link
                   href={`/${company.name}`}
                   key={company.$id}
-                  className="text-white"
+                  className="text-white group"
                 >
-                  <div className="inline-flex items-center justify-between gap-2">
+                  <li className="inline-flex items-center justify-start gap-2 w-full">
                     <Image
                       src={company.logoUrl || '/assets/logos/logo.png'}
                       alt="company logo"
@@ -85,13 +85,15 @@ export const SearchForm = () => {
                       className="rounded-full object-contain h-10 w-10"
                     />
                     <div>
-                      <p className="text-lg font-semibold">{company.name}</p>
+                      <p className="text-lg font-semibold group-hover:underline">
+                        {company.name}
+                      </p>
                       <p className="text-mg font-medium">{company.address}</p>
                     </div>
-                  </div>
+                  </li>
                 </Link>
               ))}
-            </div>
+            </ul>
           )}
         </div>
 

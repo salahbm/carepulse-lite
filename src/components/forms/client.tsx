@@ -14,7 +14,7 @@ import 'react-phone-number-input/style.css';
 import SubmitButton from '../shared/submit-btn';
 import { createUser } from '@/lib/actions/clients.actions';
 import toast from 'react-hot-toast';
-import { companyName } from '@/lib/helpers';
+import { companyName, firstLetterUppercase } from '@/lib/helpers';
 
 export const ClientForm = ({
   user,
@@ -45,7 +45,7 @@ export const ClientForm = ({
       const newUser = await createUser(user);
       if (newUser) {
         router.push(`${path}/clients/${newUser.$id}/new-appointment`);
-        toast.success(`Welcome to ${company.toLocaleUpperCase()}!`);
+        toast.success(`Welcome to ${firstLetterUppercase(company)}!`);
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong!');
@@ -58,13 +58,12 @@ export const ClientForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <section className="mb-12">
-          <h1 className="font-header-1">Hi there 👋</h1>
+          <h1 className="font-header-1">
+            Welcome to {firstLetterUppercase(company)}
+          </h1>
           <p className="text-dark-600 font-body-1 mt-2">
             Log in or sign up to get started
           </p>
-          <span className="text-dark-700 font-caption-1">
-            You are signing up for {company.toLocaleUpperCase()}
-          </span>
         </section>
 
         <CustomFormField
