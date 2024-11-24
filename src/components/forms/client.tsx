@@ -44,7 +44,7 @@ export const ClientForm = ({
       };
       const newUser = await createUser(user);
       if (newUser) {
-        router.push(`${path}/clients/${newUser.$id}/new-appointment`);
+        router.push(`${path}/clients/${newUser.$id}/register`);
         toast.success(`Welcome to ${firstLetterUppercase(company)}!`);
       }
     } catch (error: any) {

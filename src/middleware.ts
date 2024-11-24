@@ -18,13 +18,13 @@ export async function middleware(request: NextRequest) {
   const company = segments[1];
   const userId = segments[3];
 
-  if (pathname.includes('/new-appointment')) {
+  if (pathname.includes('/register')) {
     const client = await getClient(userId);
 
-    if (!client) {
+    if (client) {
       // Redirect to register page if no client exists
       return NextResponse.redirect(
-        new URL(`/${company}/clients/${userId}/register`, request.url)
+        new URL(`/${company}/clients/${userId}/new-appointment`, request.url)
       );
     }
   }
