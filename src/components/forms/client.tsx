@@ -44,8 +44,8 @@ export const ClientForm = ({
       };
       const newUser = await createUser(user);
       if (newUser) {
-        router.push(`${path}/clients/${newUser.$id}/register`);
-        toast.success('Welcome to BookingUz!');
+        router.push(`${path}/clients/${newUser.$id}/new-appointment`);
+        toast.success(`Welcome to ${company.toLocaleUpperCase()}!`);
       }
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong!');

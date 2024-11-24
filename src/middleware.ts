@@ -1,6 +1,7 @@
 import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
+import { getClient } from './lib/actions/clients.actions';
 
 const { defaultLocale, localePrefix, locales } = routing;
 
@@ -10,48 +11,34 @@ const intlMiddleware = createIntlMiddleware({
   localePrefix,
 });
 
-// Define auth routes and protected pages
-const authRoutes = '/sign-in';
-// Use regular expressions to match each protected page and its subpaths
-const protectedPages = [
-  '/admin/date-time',
-  `/admin/statistics`,
-  `/admin/settings`,
-  '/admin',
-];
-
 export async function middleware(request: NextRequest) {
-  // Check for authentication cookie
-
   const pathname = request.nextUrl.pathname;
 
-  const dynamicPath = pathname.split('/')[1];
+  const segments = pathname.split('/');
+  const company = segments[1];
+  const userId = segments[3];
 
-  const isLoggedIn = request.cookies.has(`${dynamicPath}_auth_token`);
+  if (pathname.includes('/new-appointment')) {
+    const client = await getClient(userId);
 
-  // Check if the request is for an auth route
-  const isAuthRoute = pathname.includes(authRoutes);
-
-  // Redirect authenticated user away from auth routes
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL(`/${dynamicPath}/admin`, request.url));
-  }
-
-  // Redirect unauthenticated user trying to access protected routes
-  const isProtectedPage = protectedPages.some((pattern) =>
-    pathname.match(pattern)
-  );
-  if (!isLoggedIn && isProtectedPage) {
-    // Avoid loop by ensuring the pathname does not already end with /sign-in
-    if (!pathname.endsWith('/sign-in')) {
-      const basePath = dynamicPath; // Extract the first dynamic segment (e.g., 'salahLLC')
+    if (!client) {
+      // Redirect to register page if no client exists
       return NextResponse.redirect(
-        new URL(`/${basePath}/sign-in`, request.url)
+        new URL(`/${company}/clients/${userId}/register`, request.url)
       );
     }
   }
 
-  // Apply locale middleware, excluding specific paths
+  const dynamicPath = segments[1];
+  const isLoggedIn = request.cookies.has(`${dynamicPath}_auth_token`);
+
+  // Redirect authenticated user away from auth routes
+  const isAuthRoute = pathname.includes('/sign-in');
+  if (isAuthRoute && isLoggedIn) {
+    return NextResponse.redirect(new URL(`/${dynamicPath}/admin`, request.url));
+  }
+
+  // Locale middleware handling
   if (
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
@@ -65,9 +52,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!.*\\..*|_next|favicon\\.ico).*)', // Exclude files and Next.js internals
+    '/((?!.*\\..*|_next|favicon\\.ico).*)',
     '/',
-    '/(api|trpc)(.*)', // API and trpc endpoints
-    '/(uz|ru|en)/:path*', // Locale-specific paths
+    '/(api|trpc)(.*)',
+    '/(uz|ru|en)/:path*',
   ],
 };

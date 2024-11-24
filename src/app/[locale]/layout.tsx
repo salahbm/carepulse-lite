@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from 'next-themes';
 import RootProvider from '@/providers/root';
 import { setRequestLocale } from 'next-intl/server';
+import Head from 'next/head';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -38,6 +39,12 @@ export default async function IndexLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+      </Head>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',

@@ -1,16 +1,13 @@
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
-import { getClient, getUser } from '@/lib/actions/clients.actions';
+import { getUser } from '@/lib/actions/clients.actions';
 import RegisterForm from '@/components/forms/register';
 
 const Register = async ({ params }: any) => {
   const { userId, company } = await params;
   if (!company || !userId) redirect('/');
   const user = await getUser(userId);
-  const client = await getClient(userId);
-
-  if (client) redirect(`/${company}/clients/${userId}/new-appointment`);
 
   return (
     <div className="flex h-screen max-h-screen">

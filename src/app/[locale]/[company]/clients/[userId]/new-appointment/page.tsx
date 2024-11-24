@@ -3,19 +3,16 @@ import Image from 'next/image';
 import { getClient } from '@/lib/actions/clients.actions';
 import { AppointmentForm } from '@/components/forms/appointment';
 import { getCompany } from '@/lib/actions/company.actions';
-import { redirect } from 'next/navigation';
 
 const Appointment = async ({
   params,
 }: {
   params: Promise<{ userId: string; company: string }>;
 }) => {
-  const resolvedParams = await params; // Await if params is a promise
+  const resolvedParams = await params;
   const { userId, company: companyName } = resolvedParams;
   const client = await getClient(userId);
   const company = await getCompany(companyName);
-  if (!client) redirect(`/${company}/clients/${userId}/register`);
-  if (!company) redirect(`/${company}`);
 
   return (
     <div className="flex h-screen max-h-screen">
