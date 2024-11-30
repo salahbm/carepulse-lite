@@ -19,12 +19,23 @@ export async function middleware(request: NextRequest) {
   const userId = segments[3];
 
   if (pathname.includes('/new-appointment')) {
-    const client = await getClient(userId);
+    try {
+      const client = await getClient(userId);
 
-    if (!client) {
-      // Redirect to register page if no client exists
-      return NextResponse.redirect(
-        new URL(`/${company}/clients/${userId}/register`, request.url)
+      if (!client) {
+        // Redirect to register page if no client exists
+        return NextResponse.redirect(
+          new URL(`/${company}/clients/${userId}/register`, request.url)
+        );
+      }
+    } catch (error: any) {
+      console.error('Error fetching client in middleware:', error);
+      return new Response(
+        JSON.stringify({
+          error: 'Failed to fetch client',
+          details: error.message,
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
   }
@@ -42,7 +53,7 @@ export async function middleware(request: NextRequest) {
   if (
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
-    !pathname.includes('/favicon.ico')
+    !pathname.endsWith('/favicon.ico')
   ) {
     return intlMiddleware(request);
   }
