@@ -78,7 +78,7 @@ export const getClient = async (userId: string) => {
     return parseStringify(clients.documents[0]);
   } catch (error: any) {
     console.error('An error occurred:', error.message || error);
-    return NextResponse.error(); // Returns a 500 error response
+    return NextResponse.error();
   }
 };
 
