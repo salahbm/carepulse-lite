@@ -83,6 +83,9 @@ export const AppointmentForm = ({
         if (newAppointment) {
           form.reset();
           toast.success('Appointment created successfully!');
+          router.push(
+            `${allAppointmentsUrl}/appointments/${newAppointment.data?.$id}`
+          );
         }
       } else {
         const appointmentToUpdate = {

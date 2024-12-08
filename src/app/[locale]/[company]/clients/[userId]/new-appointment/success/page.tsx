@@ -46,14 +46,14 @@ const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
         <div className="flex-row justify-between items-center flex gap-8 flex-wrap">
           <div className="flex items-center gap-3">
             <Image
-              src={company?.logoUrl || '/assets/logos/logo.png'}
+              src={company?.data?.logoUrl || '/assets/logos/logo.png'}
               alt="company"
               width={100}
               height={100}
               className="size-6"
             />
             <p className="whitespace-nowrap">
-              {firstLetterUppercase(company?.name)}
+              {firstLetterUppercase(company?.data?.name!)}
             </p>
           </div>
           <div className="flex gap-2 ">
@@ -63,19 +63,21 @@ const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
               width={24}
               alt="calendar"
             />
-            <p> {formatDateTime(appointment.schedule).dateTime}</p>
+            <p> {formatDateTime(appointment.data!.schedule).dateTime}</p>
           </div>
         </div>
       </section>
       <div className="mt-6 inline-flex justify-between items-center">
         <Button variant="default" className="h-11" asChild>
-          <Link href={`/${company.name}/clients/${userId}/new-appointment`}>
+          <Link
+            href={`/${company.data?.name}/clients/${userId}/new-appointment`}
+          >
             <Clock />
             New Appointment
           </Link>
         </Button>
         <Button variant="outline" className="h-11" asChild>
-          <Link href={`/${company.name}/clients/${userId}/appointments`}>
+          <Link href={`/${company.data?.name}/clients/${userId}/appointments`}>
             <BookOpenText />
             All Appointments
           </Link>

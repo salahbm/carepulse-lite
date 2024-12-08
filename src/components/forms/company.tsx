@@ -79,7 +79,7 @@ const CompanyForm = () => {
       const newCompany = await registerCompany(company);
 
       if (newCompany) {
-        router.push(`/set-up/${newCompany.name}`);
+        router.push(`/set-up/${newCompany.data?.name}`);
       }
     } catch (error) {
       console.log(error);

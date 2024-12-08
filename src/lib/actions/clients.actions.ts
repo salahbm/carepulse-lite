@@ -1,4 +1,5 @@
 'use server';
+
 import { ID, Query } from 'node-appwrite';
 import { parseStringify } from '../utils';
 import {
@@ -8,27 +9,43 @@ import {
   users,
 } from '../appwrite.config';
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { createErrorResponse } from './errorHandler';
+import { TClient } from '@/types/appwrite.types';
+
+// Types for internal use
+type ClientResponse<T> = {
+  data?: T;
+  error?: {
+    message: string;
+    code: string;
+  };
+};
 
 // CREATE USER
-export const createUser = async (user: CreateUserParams) => {
-  // Store data in Cookie to check if user is authenticated
-  const cookie = await cookies();
-  cookie.set('user', JSON.stringify(user), {
-    secure: true,
-    sameSite: 'strict',
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-  });
-
+export async function createUser(user: CreateUserParams): Promise<ClientResponse<TClient>> {
   try {
+    if (!user.phone || !user.name) {
+      return createErrorResponse('Phone and name are required', 'INVALID_INPUT');
+    }
+
+    // Store data in Cookie to check if user is authenticated
+    const cookie = await cookies();
+    cookie.set('user', JSON.stringify(user), {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
     // Check if a user with the given name and phone number already exists
     const existingUserList = await users.list([
       Query.equal('phone', user.phone),
       Query.equal('name', user.name),
+      Query.limit(1),
     ]);
 
     if (existingUserList.total > 0) {
-      return parseStringify(existingUserList.users[0]);
+      return { data: parseStringify(existingUserList.users[0]) };
     }
 
     // If no user exists, create a new user
@@ -40,64 +57,77 @@ export const createUser = async (user: CreateUserParams) => {
       user.name
     );
 
-    return parseStringify(newUser);
-  } catch (error: any) {
-    console.error('An error occurred while creating a new user:', error);
-    throw error;
+    return { data: parseStringify(newUser) };
+  } catch (error) {
+    console.error('Create user error:', error);
+    return createErrorResponse('Failed to create user', 'CREATION_ERROR');
   }
-};
+}
 
 // GET USER
-export const getUser = async (userId: string) => {
+export async function getUser(userId: string): Promise<ClientResponse<TClient>> {
   try {
-    const user = await users.get(userId);
-
-    return parseStringify(user);
-  } catch (error) {
-    console.error(
-      'An error occurred while retrieving the user details:',
-      error
-    );
-  }
-};
-
-// GET ClIENT
-export const getClient = async (userId: string) => {
-  try {
-    const clients = await databases.listDocuments(
-      DATABASE_ID!,
-      CLIENT_COLLECTION_ID!,
-      [Query.equal('userId', [userId])]
-    );
-
-    if (!clients.documents || clients.documents.length === 0) {
-      console.warn(`No client found for userId: ${userId}`);
-      throw new Error(`No client found for userId: ${userId}`);
+    if (!userId?.trim()) {
+      return createErrorResponse('User ID is required', 'INVALID_INPUT');
     }
 
-    return parseStringify(clients.documents[0]);
-  } catch (error: any) {
-    console.error('An error occurred:', error.message || error);
-    return NextResponse.error();
+    const user = await users.get(userId);
+    return { data: parseStringify(user) };
+  } catch (error) {
+    console.error('Get user error:', error);
+    return createErrorResponse('Failed to get user', 'FETCH_ERROR');
   }
-};
+}
 
-// REGISTER client
-export const registerClient = async ({ ...client }: RegisterUserParams) => {
+// GET CLIENT
+export const getClient = async (userId: string) => {
   try {
-    // Create new client document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
+    const client = await databases.listDocuments(
+      DATABASE_ID!,
+      CLIENT_COLLECTION_ID!,
+      [Query.equal('userId', userId)]
+    );
+
+    if (client.documents.length === 0) {
+      return { error: { code: 'NOT_FOUND', message: 'Client not found' } };
+    }   
+
+    return { data: parseStringify(client) };
+  } catch (docError: any) {
+    if (docError!.code === 404) {
+      return createErrorResponse('Client not found', 'NOT_FOUND');
+    }
+    console.error('Get client error:', docError);
+    return createErrorResponse('Failed to get client', 'FETCH_ERROR');
+    }
+
+}
+
+// REGISTER CLIENT
+export async function registerClient(client: RegisterUserParams): Promise<ClientResponse<TClient>> {
+  try {
+    if (!client.userId || !client.name || !client.phone) {
+      return createErrorResponse(
+        'User ID, name, and phone are required',
+        'INVALID_INPUT'
+      );
+    }
+
+    // Create new client document
     const newClient = await databases.createDocument(
       DATABASE_ID!,
       CLIENT_COLLECTION_ID!,
-      ID.unique(),
-      { ...client }
+      client.userId,
+      {
+        name: client.name,
+        phone: client.phone,
+        createdAt: new Date().toISOString(),
+      }
     );
 
-    return parseStringify(newClient);
+    return { data: parseStringify(newClient) };
   } catch (error) {
-    console.log('An error occurred while creating a new client:', error);
-    throw new Error('An error occurred while creating a new client', {
-      cause: error,
-    });
+    console.error('Register client error:', error);
+    return createErrorResponse('Failed to register client', 'REGISTRATION_ERROR');
   }
-};
+}

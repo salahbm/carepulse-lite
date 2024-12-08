@@ -48,7 +48,7 @@ export const AdminForm = () => {
     try {
       const response = await signInCompany(company, values.pwd);
       if (response) {
-        const encryptedKey = encryptKey(response);
+        const encryptedKey = encryptKey(values.pwd);
         Cookies.set(`${company}_auth_token`, encryptedKey);
         toast.success('Welcome to Admin!');
         router.refresh();

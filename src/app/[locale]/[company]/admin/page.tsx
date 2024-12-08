@@ -49,25 +49,25 @@ const Dashboard = async ({
         <section className="flex gap-4 flex-wrap my-6">
           <StatCard
             type="appointments"
-            count={appointments.scheduledCount}
+            count={appointments.data.counts.scheduledCount}
             label="Scheduled appointments"
             icon={'/assets/icons/appointments.svg'}
           />
           <StatCard
             type="pending"
-            count={appointments.pendingCount}
+            count={appointments.data.counts.pendingCount}
             label="Pending appointments"
             icon={'/assets/icons/pending.svg'}
           />
           <StatCard
             type="cancelled"
-            count={appointments.cancelledCount}
+            count={appointments.data.counts.cancelledCount}
             label="Cancelled appointments"
             icon={'/assets/icons/cancelled.svg'}
           />
         </section>
 
-        <DataTable columns={columns} data={appointments.documents} />
+        <DataTable columns={columns} data={appointments.data.appointments} />
       </main>
     </div>
   );

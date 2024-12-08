@@ -43,7 +43,7 @@ const UserNav = () => {
   const fetchCompany = async () => {
     try {
       const response = await getCompany(company);
-      setData(response);
+      setData(response.data);
     } catch (error) {
       console.log(error);
     }

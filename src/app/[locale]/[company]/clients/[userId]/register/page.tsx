@@ -7,7 +7,11 @@ import Logo from '@/components/shared/logo';
 
 const Register = async ({ params }: any) => {
   const { userId, company } = await params;
-  if (!company || !userId) redirect('/');
+
+  if (!userId || !company) {
+    redirect('/');
+  }
+
   const user = await getUser(userId);
 
   return (
@@ -15,7 +19,7 @@ const Register = async ({ params }: any) => {
       <section className="remove-scrollbar container justify-start">
         <div className="sub-container max-w-[860px] py-10">
           <Logo />
-          <RegisterForm user={user} company={company} />
+          <RegisterForm user={user.data!} company={company} />
 
           <p className="py-12">© 2024 EasyBooking</p>
         </div>
