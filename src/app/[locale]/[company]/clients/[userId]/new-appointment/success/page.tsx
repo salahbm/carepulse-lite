@@ -8,14 +8,20 @@ import { FC } from 'react';
 import Logo from '@/components/shared/logo';
 import { BookOpenText, Clock } from 'lucide-react';
 import { firstLetterUppercase } from '@/lib/helpers';
-interface Props {
-  searchParams: { [key: string]: string };
-  params: { [key: string]: string };
-}
 
-const SuccessAppointment: FC<any> = async ({ searchParams, params }) => {
-  const { userId, company: companyName } = await params;
-  const { appointmentId } = await searchParams;
+
+const SuccessAppointment = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ userId: string; company: string }>;
+  searchParams: Promise<{ appointmentId: string }>;
+}) => {
+  const [{ userId, company: companyName }, { appointmentId }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+
   if (!userId || !companyName || !appointmentId) {
     console.error('Missing required parameters');
     return <p>Error: Missing required parameters</p>;
