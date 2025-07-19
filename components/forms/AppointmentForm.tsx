@@ -81,7 +81,6 @@ export const AppointmentForm = ({
           reason: values.reason!,
           status: status as Status,
           note: values.note || "",
-          company: "Unknown", // Required field based on schema
         };
 
         try {
@@ -109,7 +108,6 @@ export const AppointmentForm = ({
             schedule: new Date(values.schedule),
             status: status as Status,
             cancellationReason: values.cancellationReason,
-            company: "Unknown", // Required field based on schema
           },
           type,
         };
@@ -124,6 +122,7 @@ export const AppointmentForm = ({
         }
       }
     } catch (error: any) {
+      console.error("An error occurred:", error);
       setError(error?.message || "An error occurred. Please try again.");
     }
     setIsLoading(false);

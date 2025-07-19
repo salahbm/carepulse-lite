@@ -18,6 +18,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { decryptKey, encryptKey } from "@/lib/utils";
 
 export const PasskeyModal = () => {
@@ -42,7 +48,7 @@ export const PasskeyModal = () => {
       } else {
         setOpen(true);
       }
-  }, [encryptedKey]);
+  }, [encryptedKey, path, router]);
 
   const closeModal = () => {
     setOpen(false);
@@ -66,55 +72,69 @@ export const PasskeyModal = () => {
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="shad-alert-dialog">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="flex items-start justify-between">
-            Admin Access Verification
-            <Image
-              src="/assets/icons/close.svg"
-              alt="close"
-              width={20}
-              height={20}
-              onClick={() => closeModal()}
-              className="cursor-pointer"
-            />
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            To access the admin page, please enter the passkey.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <div>
-          <InputOTP
-            maxLength={6}
-            value={passkey}
-            onChange={(value) => setPasskey(value)}
-          >
-            <InputOTPGroup className="shad-otp">
-              <InputOTPSlot className="shad-otp-slot" index={0} />
-              <InputOTPSlot className="shad-otp-slot" index={1} />
-              <InputOTPSlot className="shad-otp-slot" index={2} />
-              <InputOTPSlot className="shad-otp-slot" index={3} />
-              <InputOTPSlot className="shad-otp-slot" index={4} />
-              <InputOTPSlot className="shad-otp-slot" index={5} />
-            </InputOTPGroup>
-          </InputOTP>
+    <TooltipProvider>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent className="shad-alert-dialog max-w-[95vw] md:max-w-fit">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-start justify-between">
+              Admin Access Verification
+              <Image
+                src="/assets/icons/close.svg"
+                alt="close"
+                width={20}
+                height={20}
+                onClick={() => closeModal()}
+                className="cursor-pointer"
+              />
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              To access the admin page, please enter the passkey.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="my-4">
+            <InputOTP
+              maxLength={6}
+              value={passkey}
+              onChange={(value) => setPasskey(value)}
+            >
+              <InputOTPGroup className="shad-otp flex-wrap justify-center gap-2 md:flex-nowrap">
+                <InputOTPSlot className="shad-otp-slot" index={0} />
+                <InputOTPSlot className="shad-otp-slot" index={1} />
+                <InputOTPSlot className="shad-otp-slot" index={2} />
+                <InputOTPSlot className="shad-otp-slot" index={3} />
+                <InputOTPSlot className="shad-otp-slot" index={4} />
+                <InputOTPSlot className="shad-otp-slot" index={5} />
+              </InputOTPGroup>
+            </InputOTP>
 
-          {error && (
-            <p className="shad-error text-14-regular mt-4 flex justify-center">
-              {error}
-            </p>
-          )}
-        </div>
-        <AlertDialogFooter>
-          <AlertDialogAction
-            onClick={(e) => validatePasskey(e)}
-            className="shad-primary-btn w-full"
-          >
-            Enter Admin Passkey
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+            {error && (
+              <p className="shad-error text-14-regular mt-4 flex justify-center">
+                {error}
+              </p>
+            )}
+          </div>
+          <div className="mb-4 flex justify-center">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="cursor-pointer text-sm text-blue-500 underline">
+                  Need the passkey?
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-slate-800 p-2 text-white">
+                <p>Passkey: {process.env.NEXT_PUBLIC_ADMIN_PASSKEY}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={(e) => validatePasskey(e)}
+              className="shad-primary-btn w-full"
+            >
+              Enter Admin Passkey
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </TooltipProvider>
   );
 };

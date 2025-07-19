@@ -25,10 +25,9 @@ export interface Patient extends Models.Document {
 }
 
 export interface Appointment extends Models.Document {
-  client: string; // Relationship field to the patient/client record
+  client: string | Patient; // Relationship field to the patient/client record (can be string ID or expanded object)
   schedule: Date;
   status: Status;
-  primaryPhysician: string;
   reason: string;
   note: string;
   userId: string;

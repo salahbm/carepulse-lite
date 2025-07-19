@@ -54,7 +54,7 @@ declare type CreateAppointmentParams = {
   schedule: Date;
   status: Status;
   note: string | undefined;
-  company: string; // Required field based on Appwrite schema
+  company?: string;
 };
 
 declare type UpdateAppointmentParams = {

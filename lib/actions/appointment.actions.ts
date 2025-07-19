@@ -134,7 +134,6 @@ export const updateAppointment = async ({
     const updateData = {
       schedule: appointment.schedule,
       status: appointment.status,
-      company: appointment.company || "Unknown",
       ...(appointment.cancellationReason
         ? { cancellationReason: appointment.cancellationReason }
         : {}),
@@ -149,7 +148,7 @@ export const updateAppointment = async ({
 
     if (!updatedAppointment) throw Error;
 
-    const smsMessage = `Greetings from CarePulse. ${type === "schedule" ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!, timeZone).dateTime} with Dr. ${appointment.primaryPhysician}` : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!, timeZone).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`}.`;
+    const smsMessage = `Greetings from CarePulse. ${type === "schedule" ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!, timeZone).dateTime} with Dr. David Livingston` : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!, timeZone).dateTime} is cancelled. Reason: ${appointment.cancellationReason || "No reason provided"}`}.`;
 
     // Just use userId for SMS since we don't have direct access to patient phone here
     await sendSMSNotification(userId, smsMessage);

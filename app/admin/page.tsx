@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AppointmentCard } from "@/components/AppointmentCard";
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/types/appwrite.types";
 
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
@@ -54,7 +56,17 @@ const AdminPage = async () => {
           />
         </section>
 
-        <DataTable columns={columns} data={appointments.documents} />
+        {/* Show DataTable on medium and large screens */}
+        <div className="hidden md:block">
+          <DataTable columns={columns} data={appointments.documents} />
+        </div>
+
+        {/* Show cards on small screens */}
+        <div className="grid w-full grid-cols-1 gap-4 md:hidden">
+          {appointments.documents.map((appointment: Appointment) => (
+            <AppointmentCard key={appointment.$id} appointment={appointment} />
+          ))}
+        </div>
       </main>
     </div>
   );

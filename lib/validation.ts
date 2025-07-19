@@ -96,7 +96,7 @@ export const ScheduleAppointmentSchema = z.object({
 });
 
 export const CancelAppointmentSchema = z.object({
-  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  primaryPhysician: z.string().optional(),
   schedule: z.coerce.date(),
   reason: z.string().optional(),
   note: z.string().optional(),
@@ -109,10 +109,24 @@ export const CancelAppointmentSchema = z.object({
 export function getAppointmentSchema(type: string) {
   switch (type) {
     case "create":
-      return CreateAppointmentSchema;
+      return CreateAppointmentSchema.superRefine((data, ctx) => {
+        if (!data.primaryPhysician) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Select at least one doctor",
+          });
+        }
+      });
     case "cancel":
       return CancelAppointmentSchema;
     default:
-      return ScheduleAppointmentSchema;
+      return ScheduleAppointmentSchema.superRefine((data, ctx) => {
+        if (!data.primaryPhysician) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Select at least one doctor",
+          });
+        }
+      });
   }
 }
