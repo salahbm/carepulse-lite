@@ -1,15 +1,11 @@
 "use server";
 
-import { ID, InputFile, Query } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 
 import {
-  BUCKET_ID,
   DATABASE_ID,
-  ENDPOINT,
   PATIENT_COLLECTION_ID,
-  PROJECT_ID,
   databases,
-  storage,
   users,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
@@ -22,21 +18,49 @@ export const createUser = async (user: CreateUserParams) => {
       ID.unique(),
       user.email,
       user.phone,
-      undefined,
+      undefined, // password is undefined as we're using phone auth
       user.name
     );
-
     return parseStringify(newuser);
   } catch (error: any) {
     // Check existing user
     if (error && error?.code === 409) {
-      const existingUser = await users.list([
-        Query.equal("email", [user.email]),
-      ]);
+      try {
+        // Try to find user by email first
+        let existingUser = await users.list([
+          Query.equal("email", [user.email]),
+        ]);
 
-      return existingUser.users[0];
+        if (existingUser.users.length > 0) {
+          return existingUser.users[0];
+        }
+
+        // If not found by email, try by phone
+        existingUser = await users.list([Query.equal("phone", [user.phone])]);
+
+        if (existingUser.users.length > 0) {
+          return existingUser.users[0];
+        }
+
+        // If we still can't find the user, create a new one with a slightly modified email
+        const timestamp = Date.now();
+        const modifiedEmail = `${user.email.split("@")[0]}_${timestamp}@${user.email.split("@")[1]}`;
+
+        const newUser = await users.create(
+          ID.unique(),
+          modifiedEmail,
+          user.phone,
+          undefined,
+          user.name
+        );
+
+        return parseStringify(newUser);
+      } catch (listError) {
+        console.error("Error handling existing user:", listError);
+        throw listError;
+      }
     }
-    console.error("An error occurred while creating a new user:", error);
+    throw error;
   }
 };
 
@@ -56,40 +80,39 @@ export const getUser = async (userId: string) => {
 
 // REGISTER PATIENT
 export const registerPatient = async ({
-  identificationDocument,
-  ...patient
+  identificationDocument, // We'll ignore this for now since it's not in the schema
+  ...patientData
 }: RegisterUserParams) => {
   try {
-    // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
-    let file;
-    if (identificationDocument) {
-      const inputFile =
-        identificationDocument &&
-        InputFile.fromBlob(
-          identificationDocument?.get("blobFile") as Blob,
-          identificationDocument?.get("fileName") as string
-        );
+    const cleanPatient = {
+      userId: patientData.userId,
+      name: patientData.name,
+      phone: patientData.phone,
+      email: patientData.email || "",
+      gender: patientData.gender.toLowerCase(),
+      company: patientData.company,
+      emergencyName: patientData.emergencyName || "",
+      emergencyPhone: patientData.emergencyPhone || "",
+      privacyConsent: patientData.privacyConsent,
+    };
 
-      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
-    }
-
-    // Create new patient document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
     const newPatient = await databases.createDocument(
       DATABASE_ID!,
       PATIENT_COLLECTION_ID!,
       ID.unique(),
-      {
-        identificationDocumentId: file?.$id ? file.$id : null,
-        identificationDocumentUrl: file?.$id
-          ? `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file.$id}/view??project=${PROJECT_ID}`
-          : null,
-        ...patient,
-      }
+      cleanPatient
     );
 
     return parseStringify(newPatient);
-  } catch (error) {
+  } catch (error: any) {
     console.error("An error occurred while creating a new patient:", error);
+    if (error?.code === 400) {
+      console.error(
+        "Validation error - check required fields:",
+        error?.message
+      );
+    }
+    throw error; // Re-throw the error to be handled by the caller
   }
 };
 
@@ -102,11 +125,16 @@ export const getPatient = async (userId: string) => {
       [Query.equal("userId", [userId])]
     );
 
+    if (patients.documents.length === 0) {
+      return null;
+    }
+
     return parseStringify(patients.documents[0]);
   } catch (error) {
     console.error(
       "An error occurred while retrieving the patient details:",
       error
     );
+    return null;
   }
 };

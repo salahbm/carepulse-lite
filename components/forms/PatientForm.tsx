@@ -17,6 +17,7 @@ import SubmitButton from "../SubmitButton";
 export const PatientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -29,6 +30,7 @@ export const PatientForm = () => {
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
+    setError(null);
 
     try {
       const user = {
@@ -39,11 +41,15 @@ export const PatientForm = () => {
 
       const newUser = await createUser(user);
 
-      if (newUser) {
+      if (newUser && newUser.$id) {
         router.push(`/patients/${newUser.$id}/register`);
+      } else {
+        setError("Failed to create or retrieve user account");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setError(
+        error?.message || "An error occurred during login. Please try again."
+      );
     }
 
     setIsLoading(false);
@@ -55,6 +61,12 @@ export const PatientForm = () => {
         <section className="mb-12 space-y-4">
           <h1 className="header">Hi there 👋</h1>
           <p className="text-dark-700">Get started with appointments.</p>
+
+          {error && (
+            <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-500">
+              {error}
+            </div>
+          )}
         </section>
 
         <CustomFormField

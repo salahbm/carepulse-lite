@@ -19,33 +19,42 @@ declare interface User extends CreateUserParams {
 
 declare interface RegisterUserParams extends CreateUserParams {
   userId: string;
-  birthDate: Date;
+  name: string;
+  email: string;
+  phone: string;
   gender: Gender;
-  address: string;
-  occupation: string;
-  emergencyContactName: string;
-  emergencyContactNumber: string;
-  primaryPhysician: string;
-  insuranceProvider: string;
-  insurancePolicyNumber: string;
-  allergies: string | undefined;
-  currentMedication: string | undefined;
-  familyMedicalHistory: string | undefined;
-  pastMedicalHistory: string | undefined;
-  identificationType: string | undefined;
-  identificationNumber: string | undefined;
-  identificationDocument: FormData | undefined;
+  company: string;
+  emergencyName?: string;
+  emergencyPhone?: string;
   privacyConsent: boolean;
+
+  // Additional fields for the application
+  birthDate?: Date;
+  address?: string;
+  occupation?: string;
+  primaryPhysician?: string;
+  insuranceProvider?: string;
+  insurancePolicyNumber?: string;
+  allergies?: string;
+  currentMedication?: string;
+  familyMedicalHistory?: string;
+  pastMedicalHistory?: string;
+  identificationType?: string;
+  identificationNumber?: string;
+  identificationDocument?: FormData;
+  treatmentConsent?: boolean;
+  disclosureConsent?: boolean;
 }
 
 declare type CreateAppointmentParams = {
   userId: string;
-  patient: string;
-  primaryPhysician: string;
+  patient: string; // This will be mapped to 'client' field in the backend
+  primaryPhysician?: string; // Make this optional since it's not in the schema
   reason: string;
   schedule: Date;
   status: Status;
   note: string | undefined;
+  company: string; // Required field based on Appwrite schema
 };
 
 declare type UpdateAppointmentParams = {

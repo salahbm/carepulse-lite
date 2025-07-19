@@ -9,8 +9,8 @@ import {
   APPOINTMENT_COLLECTION_ID,
   DATABASE_ID,
   databases,
-  messaging,
 } from "../appwrite.config";
+import { sendTwilioSMS } from "../twilio.config";
 import { formatDateTime, parseStringify } from "../utils";
 
 //  CREATE APPOINTMENT
@@ -18,17 +18,36 @@ export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
   try {
+    // Create a clean object with ONLY the fields that exist in your Appwrite schema
+    // Only include fields that are in the actual schema
+    const cleanAppointment = {
+      userId: appointment.userId, // This is the user ID field
+      client: appointment.patient, // Using client field for the patient relationship
+      schedule: appointment.schedule,
+      reason: appointment.reason,
+      status: appointment.status,
+      note: appointment.note || "",
+      company: appointment.company || "Unknown",
+    };
+
     const newAppointment = await databases.createDocument(
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
       ID.unique(),
-      appointment
+      cleanAppointment
     );
 
     revalidatePath("/admin");
     return parseStringify(newAppointment);
-  } catch (error) {
+  } catch (error: any) {
     console.error("An error occurred while creating a new appointment:", error);
+    if (error?.code === 400) {
+      console.error(
+        "Validation error - check required fields:",
+        error?.message
+      );
+    }
+    throw error; // Re-throw the error to be handled by the caller
   }
 };
 
@@ -50,26 +69,6 @@ export const getRecentAppointmentList = async () => {
       APPOINTMENT_COLLECTION_ID!,
       [Query.orderDesc("$createdAt")]
     );
-
-    // const scheduledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "scheduled");
-
-    // const pendingAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "pending");
-
-    // const cancelledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "cancelled");
-
-    // const data = {
-    //   totalCount: appointments.total,
-    //   scheduledCount: scheduledAppointments.length,
-    //   pendingCount: pendingAppointments.length,
-    //   cancelledCount: cancelledAppointments.length,
-    //   documents: appointments.documents,
-    // };
 
     const initialCounts = {
       scheduledCount: 0,
@@ -111,16 +110,13 @@ export const getRecentAppointmentList = async () => {
 };
 
 //  SEND SMS NOTIFICATION
-export const sendSMSNotification = async (userId: string, content: string) => {
+export const sendSMSNotification = async (
+  phoneNumber: string,
+  content: string
+) => {
   try {
-    // https://appwrite.io/docs/references/1.5.x/server-nodejs/messaging#createSms
-    const message = await messaging.createSms(
-      ID.unique(),
-      content,
-      [],
-      [userId]
-    );
-    return parseStringify(message);
+    const result = await sendTwilioSMS(phoneNumber, content);
+    return result;
   } catch (error) {
     console.error("An error occurred while sending sms:", error);
   }
@@ -135,17 +131,27 @@ export const updateAppointment = async ({
   type,
 }: UpdateAppointmentParams) => {
   try {
-    // Update appointment to scheduled -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#updateDocument
+    const updateData = {
+      schedule: appointment.schedule,
+      status: appointment.status,
+      company: appointment.company || "Unknown",
+      ...(appointment.cancellationReason
+        ? { cancellationReason: appointment.cancellationReason }
+        : {}),
+    };
+
     const updatedAppointment = await databases.updateDocument(
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
       appointmentId,
-      appointment
+      updateData
     );
 
     if (!updatedAppointment) throw Error;
 
     const smsMessage = `Greetings from CarePulse. ${type === "schedule" ? `Your appointment is confirmed for ${formatDateTime(appointment.schedule!, timeZone).dateTime} with Dr. ${appointment.primaryPhysician}` : `We regret to inform that your appointment for ${formatDateTime(appointment.schedule!, timeZone).dateTime} is cancelled. Reason:  ${appointment.cancellationReason}`}.`;
+
+    // Just use userId for SMS since we don't have direct access to patient phone here
     await sendSMSNotification(userId, smsMessage);
 
     revalidatePath("/admin");

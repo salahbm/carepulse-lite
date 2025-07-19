@@ -13,9 +13,9 @@ const RequestSuccess = async ({
   const appointmentId = (searchParams?.appointmentId as string) || "";
   const appointment = await getAppointment(appointmentId);
 
-  const doctor = Doctors.find(
-    (doctor) => doctor.name === appointment.primaryPhysician
-  );
+  // Since primaryPhysician is not in the schema, we'll use a default doctor
+  const defaultDoctor = Doctors[0]; // Use the first doctor as default
+  const doctorName = "David Livingston"; // Hardcoded default doctor name
 
   return (
     <div className=" flex h-screen max-h-screen px-[5%]">
@@ -48,13 +48,13 @@ const RequestSuccess = async ({
           <p>Requested appointment details: </p>
           <div className="flex items-center gap-3">
             <Image
-              src={doctor?.image!}
+              src={defaultDoctor?.image || "/assets/icons/doctor.svg"}
               alt="doctor"
               width={100}
               height={100}
               className="size-6"
             />
-            <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            <p className="whitespace-nowrap">Dr. {doctorName}</p>
           </div>
           <div className="flex gap-2">
             <Image

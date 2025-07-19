@@ -25,12 +25,14 @@ export interface Patient extends Models.Document {
 }
 
 export interface Appointment extends Models.Document {
-  patient: Patient;
+  client: string; // Relationship field to the patient/client record
   schedule: Date;
   status: Status;
   primaryPhysician: string;
   reason: string;
   note: string;
   userId: string;
+  company: string; // Required field based on Appwrite schema
   cancellationReason: string | null;
+  reScheduleReason?: string; // Optional field from schema
 }

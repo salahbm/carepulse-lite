@@ -37,13 +37,13 @@ export const AppointmentForm = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
       schedule: appointment
         ? new Date(appointment?.schedule!)
         : new Date(Date.now()),
@@ -57,6 +57,7 @@ export const AppointmentForm = ({
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
     setIsLoading(true);
+    setError(null); // Clear any previous errors
 
     let status;
     switch (type) {
@@ -72,22 +73,31 @@ export const AppointmentForm = ({
 
     try {
       if (type === "create" && patientId) {
+        // Create appointment with only fields that match the schema
         const appointment = {
-          userId,
-          patient: patientId,
-          primaryPhysician: values.primaryPhysician,
+          userId, // User ID field
+          patient: patientId, // This will be mapped to 'client' field in the backend
           schedule: new Date(values.schedule),
           reason: values.reason!,
           status: status as Status,
-          note: values.note,
+          note: values.note || "",
+          company: "Unknown", // Required field based on schema
         };
 
-        const newAppointment = await createAppointment(appointment);
+        try {
+          const newAppointment = await createAppointment(appointment);
 
-        if (newAppointment) {
-          form.reset();
-          router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+          if (newAppointment) {
+            form.reset();
+            router.push(
+              `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            );
+          } else {
+            setError("Failed to create appointment. Please try again.");
+          }
+        } catch (err: any) {
+          setError(
+            err?.message || "Failed to create appointment. Please try again."
           );
         }
       } else {
@@ -96,10 +106,10 @@ export const AppointmentForm = ({
           appointmentId: appointment?.$id!,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           appointment: {
-            primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
             status: status as Status,
             cancellationReason: values.cancellationReason,
+            company: "Unknown", // Required field based on schema
           },
           type,
         };
@@ -109,10 +119,12 @@ export const AppointmentForm = ({
         if (updatedAppointment) {
           setOpen && setOpen(false);
           form.reset();
+        } else {
+          setError("Failed to update appointment. Please try again.");
         }
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setError(error?.message || "An error occurred. Please try again.");
     }
     setIsLoading(false);
   };
@@ -132,6 +144,32 @@ export const AppointmentForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
+        {error && (
+          <div className="mb-4 rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="shrink-0">
+                <svg
+                  className="size-5 text-red-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">Error</h3>
+                <div className="mt-2 text-sm text-red-700">
+                  <p>{error}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {type === "create" && (
           <section className="mb-12 space-y-4">
             <h1 className="header">New Appointment</h1>

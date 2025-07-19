@@ -40,8 +40,11 @@ const RegisterForm = ({ user }: { user: User }) => {
     },
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
+    setError(null);
 
     // Store file info in form data as
     let formData;
@@ -64,12 +67,17 @@ const RegisterForm = ({ user }: { user: User }) => {
         name: values.name,
         email: values.email,
         phone: values.phone,
-        birthDate: new Date(values.birthDate),
         gender: values.gender,
+        // Map emergency contact fields to match Appwrite schema
+        emergencyName: values.emergencyContactName,
+        emergencyPhone: values.emergencyContactNumber,
+        // Required field in Appwrite schema
+        company: values.occupation || "Not specified",
+        privacyConsent: values.privacyConsent,
+        // Additional fields not in the required schema but useful for the app
+        birthDate: new Date(values.birthDate),
         address: values.address,
         occupation: values.occupation,
-        emergencyContactName: values.emergencyContactName,
-        emergencyContactNumber: values.emergencyContactNumber,
         primaryPhysician: values.primaryPhysician,
         insuranceProvider: values.insuranceProvider,
         insurancePolicyNumber: values.insurancePolicyNumber,
@@ -82,16 +90,22 @@ const RegisterForm = ({ user }: { user: User }) => {
         identificationDocument: values.identificationDocument
           ? formData
           : undefined,
-        privacyConsent: values.privacyConsent,
+        treatmentConsent: values.treatmentConsent,
+        disclosureConsent: values.disclosureConsent,
       };
 
       const newPatient = await registerPatient(patient);
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
+      } else {
+        setError("Failed to register patient. Please try again.");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setError(
+        error?.message ||
+          "An error occurred during registration. Please try again."
+      );
     }
 
     setIsLoading(false);
@@ -106,6 +120,12 @@ const RegisterForm = ({ user }: { user: User }) => {
         <section className="space-y-4">
           <h1 className="header">Welcome 👋</h1>
           <p className="text-dark-700">Let us know more about yourself.</p>
+
+          {error && (
+            <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-500">
+              {error}
+            </div>
+          )}
         </section>
 
         <section className="space-y-6">
