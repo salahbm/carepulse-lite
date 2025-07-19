@@ -75,16 +75,35 @@ npm install
 Create a new file named `.env.local` in the root of your project and add the following content:
 
 ```env
-#APPWRITE
-NEXT_PUBLIC_ENDPOINT=https://cloud.appwrite.io/v1
-PROJECT_ID=
-API_KEY=
-DATABASE_ID=
-PATIENT_COLLECTION_ID=
-APPOINTMENT_COLLECTION_ID=
-NEXT_PUBLIC_BUCKET_ID=
+# Appwrite Credentials
+ACCOUNT_SID=your_account_sid_here
+ADMIN_COLLECTION_ID=your_admin_collection_id_here
+APPOINTMENT_COLLECTION_ID=your_appointment_collection_id_here
+CLIENT_COLLECTION_ID=your_client_collection_id_here
+COMPANY_COLLECTION_ID=your_company_collection_id_here
 
-NEXT_PUBLIC_ADMIN_PASSKEY=111111
+# Appwrite Database ID
+DATABASE_ID=your_database_id_here
+
+# Admin Passkey
+NEXT_PUBLIC_ADMIN_PASSKEY=your_admin_passkey_here
+
+# Appwrite Auth Token
+AUTH_TOKEN=your_auth_token_here
+
+# Appwrite API Key
+NEXT_PUBLIC_API_KEY=your_api_key_here
+NEXT_PUBLIC_BUCKET_ID=your_bucket_id_here
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id_here
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+
+# Twilio Credentials
+PHONE_NUMBER=your_phone_number_here
+
+# Sentry Credentials
+RECOVERY_CODE=your_recovery_code_here
+SENTRY_AUTH_TOKEN=your_auth_token_here
+
 ```
 
 Replace the placeholder values with your actual Appwrite credentials. You can obtain these credentials by signing up on the [Appwrite website](https://appwrite.io/).
