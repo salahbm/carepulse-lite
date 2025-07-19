@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -253,6 +254,15 @@ export const AppointmentForm = ({
           {buttonLabel}
         </SubmitButton>
       </form>
+
+      {type === "create" && (
+        <Link
+          href={`/patients/${userId}/my-appointments`}
+          className="mx-auto mt-4 text-center font-medium underline"
+        >
+          View My Appointments
+        </Link>
+      )}
     </Form>
   );
 };

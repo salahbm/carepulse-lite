@@ -177,3 +177,37 @@ export const getAppointment = async (appointmentId: string) => {
     );
   }
 };
+
+// GET PATIENT APPOINTMENTS
+export const getPatientAppointments = async (userId: string) => {
+  try {
+    if (!DATABASE_ID || !APPOINTMENT_COLLECTION_ID) {
+      return {
+        total: 0,
+        documents: [],
+      };
+    }
+
+    // Query appointments where client field equals userId
+    // This handles both cases where client is a string ID or an expanded object
+    const appointments = await databases.listDocuments(
+      DATABASE_ID,
+      APPOINTMENT_COLLECTION_ID,
+      [
+        Query.equal("userId", userId),
+        Query.orderDesc("schedule") // Most recent appointments first
+      ]
+    );
+
+    return {
+      total: appointments.total,
+      documents: parseStringify(appointments.documents),
+    };
+  } catch (error) {
+    console.error("An error occurred while retrieving patient appointments:", error);
+    return {
+      total: 0,
+      documents: [],
+    };
+  }
+};

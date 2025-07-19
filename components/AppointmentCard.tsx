@@ -3,16 +3,20 @@
 import Image from "next/image";
 
 import { Doctors } from "@/constants";
-import { formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
 
 import { AppointmentModal } from "./AppointmentModal";
 
 interface AppointmentCardProps {
   appointment: Appointment;
+  noSchedule?: boolean;
 }
 
-export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
+export const AppointmentCard = ({
+  appointment,
+  noSchedule,
+}: AppointmentCardProps) => {
   // Extract the client ID correctly whether it's a string or object
   const clientId =
     typeof appointment.client === "object" && appointment.client.$id
@@ -42,13 +46,11 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-16-semibold">Appointment</h3>
         <span
-          className={`rounded-full px-2 py-1 text-xs ${
-            appointment.status === "scheduled"
-              ? "bg-green-100 text-green-800"
-              : appointment.status === "pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-100 text-red-800"
-          }`}
+          className={cn(`rounded-lg capitalize px-2 text-xs p-1`, {
+            "bg-green-100 text-green-800": appointment.status === "scheduled",
+            "bg-yellow-100 text-yellow-800": appointment.status === "pending",
+            "bg-red-100 text-red-800": appointment.status === "cancelled",
+          })}
         >
           {appointment.status}
         </span>
@@ -103,14 +105,16 @@ export const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
       </div>
 
       <div className="mt-4 flex gap-2">
-        <AppointmentModal
-          patientId={clientId}
-          userId={appointment.userId}
-          appointment={appointment}
-          type="schedule"
-          title="Schedule Appointment"
-          description="Please confirm the following details to schedule."
-        />
+        {!noSchedule && (
+          <AppointmentModal
+            patientId={clientId}
+            userId={appointment.userId}
+            appointment={appointment}
+            type="schedule"
+            title="Schedule Appointment"
+            description="Please confirm the following details to schedule."
+          />
+        )}
         <AppointmentModal
           patientId={clientId}
           userId={appointment.userId}
